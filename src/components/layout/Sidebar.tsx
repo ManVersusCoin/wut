@@ -32,6 +32,13 @@ const links: LinkItem[] = [
             { to: "/wallchain-index", label: "Organic Index", icon: IdCardLanyard },
         ],
     },
+    {
+        label: "Miscellaneous",
+        logo: "/logo.png",
+        children: [
+            
+        ],
+    },
     { to: "/nft-roundup", label: "NFT Periodic Roundup", icon: IdCardLanyard },
     { to: "/airdrop-card", label: "Airdrop Card generator", icon: Gift },
     { to: "/dad-jokes", label: "CryptoDad Jokes", icon: Laugh },
