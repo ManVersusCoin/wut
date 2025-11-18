@@ -44,7 +44,7 @@ export default function LeagueLeaderboards(): JSX.Element {
     // UI state
     const [dataset, setDataset] = useState<"tournament" | "7d" | "30d">("tournament");
     const [metric, setMetric] = useState<"rankTotal" | "rankSignal" | "rankNoise">("rankTotal");
-    const [topLimit, setTopLimit] = useState<number>(500);
+    const [topLimit, setTopLimit] = useState<number>(1000);
     const [profileSearch, setProfileSearch] = useState("");
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
@@ -147,6 +147,7 @@ export default function LeagueLeaderboards(): JSX.Element {
     }, [globalProfiles, dataset]);
 
     // compute global leaderboardCount: number of topic entries with chosen dataset and rank <= topLimit
+    // NOTE: This calculation is preserved but is no longer used in the JSX summary to allow for dynamic filtering.
     const leaderboardCount = useMemo(() => {
         let count = 0;
         for (const p of globalProfiles) {
@@ -316,7 +317,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                         ? a.ranksFiltered[slug].rankTotal
                         : metric === "rankSignal"
                             ? a.ranksFiltered[slug].rankSignal
-                            : a.ranksFiltered[slug].rankNoise
+                            : b.ranksFiltered[slug].rankNoise
                     : Infinity;
                 const rb = b.ranksFiltered?.[slug]
                     ? metric === "rankTotal"
@@ -366,7 +367,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                     );
                 });
         } else {
-            // 9️⃣ Aucun topic sélectionné → tri alphabétique
+            // 9️⃣ Aucun topic sélectionné → tri automatique (par score pondéré)
             arr = arr
                 .map((p) => {
                     const ranks = Object.values(p.ranksFiltered || {});
@@ -397,6 +398,48 @@ export default function LeagueLeaderboards(): JSX.Element {
         sortConfig, // 👈 pour déclencher un nouveau tri manuel
     ]);
 
+    // **DÉBUT DES NOUVELLES CALCULATIONS DYNAMIQUES (CORRIGÉES)**
+
+    // Calcule les comptes dynamiques des Topics et des Entrées à partir des profils filtrés
+    const dynamicCounts = useMemo(() => {
+        const activeTopics = new Set<string>();
+        let leaderboardEntriesCount = 0;
+
+        // Créer un Set pour une recherche rapide si des topics sont sélectionnés
+        const selectedTopicsSet = new Set(selectedTopics);
+        const topicsAreFiltered = selectedTopics.length > 0;
+
+        filteredSortedProfiles.forEach(p => {
+            const topicSlugs = Object.keys(p.ranksFiltered || {});
+
+            topicSlugs.forEach(slug => {
+                // CORRECTION: Si des topics sont sélectionnés, ne compte que l'entrée et le topic 
+                // s'ils sont dans la liste sélectionnée.
+                if (!topicsAreFiltered || selectedTopicsSet.has(slug)) {
+                    leaderboardEntriesCount += 1;
+                    activeTopics.add(slug);
+                }
+            });
+        });
+
+        return {
+            activeTopicsCount: activeTopics.size,
+            leaderboardEntriesCount
+        };
+    }, [filteredSortedProfiles, selectedTopics]); // Ajout de selectedTopics en dépendance
+
+    const { activeTopicsCount, leaderboardEntriesCount } = dynamicCounts;
+
+    // Calculer le nombre de profils filtrés
+    const filteredProfilesCount = filteredSortedProfiles.length;
+
+    // Nouvel Indicateur : Profile Coverage Ratio = Profiles Analyzed / Leaderboard Entries
+    const profileCoverageRatio = useMemo(() => {
+        if (leaderboardEntriesCount === 0) return 0;
+        return (filteredProfilesCount / leaderboardEntriesCount) * 100;
+    }, [filteredProfilesCount, leaderboardEntriesCount]);
+
+    // **FIN DES NOUVELLES CALCULATIONS DYNAMIQUES**
 
     // pagination
     const totalPages = Math.max(1, Math.ceil(filteredSortedProfiles.length / itemsPerPage));
@@ -414,7 +457,7 @@ export default function LeagueLeaderboards(): JSX.Element {
         });
     };
 
- 
+
     // helpers
     const toggleTopic = (slug: string) => {
         setSelectedTopics((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
@@ -426,14 +469,11 @@ export default function LeagueLeaderboards(): JSX.Element {
     // render helpers
     const getTopicMeta = (slug: string) => topicMetas.find((t) => t.topicSlug === slug) ?? { topicSlug: slug, title: slug };
 
-    // Calculate the number of profiles based on the filter
-    const filteredProfilesCount = filteredSortedProfiles.length;
-
     return (
         <div className="space-y-6 text-gray-900 dark:text-gray-100">
-            
+
             {/* Header summary */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="bg-gray-500 dark:bg-gray-800 rounded-xl p-4 shadow-md flex items-center">
                     <div className="flex-shrink-0 mr-4">
                         <img
@@ -445,7 +485,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                     <div className="flex flex-col">
                         <div className="text-white text-lg font-bold">Xeet</div>
                         <a
-                            href="https://www.xeet.ai/refer/man_versus_coin" 
+                            href="https://www.xeet.ai/refer/man_versus_coin"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-white text-xs underline mt-1"
@@ -460,11 +500,16 @@ export default function LeagueLeaderboards(): JSX.Element {
                 </div>
                 <div className="bg-green-500 dark:bg-green-800 rounded-xl p-4 shadow-md">
                     <div className="text-white text-sm font-medium">Active Topics</div>
-                    <div className="text-white text-2xl font-bold">{topicsForDataset.length}</div>
+                    <div className="text-white text-2xl font-bold">{activeTopicsCount}</div>
                 </div>
                 <div className="bg-purple-500 dark:bg-purple-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
                     <div className="text-white text-sm font-medium">Leaderboard Entries</div>
-                    <div className="text-white text-2xl font-bold">{leaderboardCount}</div>
+                    <div className="text-white text-2xl font-bold">{leaderboardEntriesCount}</div>
+                </div>
+
+                <div className="bg-red-500 dark:bg-red-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
+                    <div className="text-white text-sm font-medium">Profile Coverage Ratio</div>
+                    <div className="text-white text-2xl font-bold">{profileCoverageRatio.toFixed(2)}%</div>
                 </div>
             </div>
             {/* Controls */}
@@ -528,13 +573,13 @@ export default function LeagueLeaderboards(): JSX.Element {
                     <div className="flex items-center gap-3 w-full md:w-auto">
                         <input value={profileSearch} onChange={(e) => { setProfileSearch(e.target.value); setCurrentPage(1); }} placeholder="Search profiles..." className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 w-full md:w-64" />
                     </div>
-                    
+
                 </div>
                 {/* Last generation date */}
                 <div className="text-sm text-gray-500 dark:text-gray-400">
                     Last updated: {generationDate ? new Date(generationDate).toLocaleString() : 'N/A'}
                 </div>
-                
+
             </div>
 
             {/* topic-overlap filter */}
@@ -552,7 +597,7 @@ export default function LeagueLeaderboards(): JSX.Element {
             ) : filteredSortedProfiles.length === 0 ? (
                 <div className="py-10 text-center text-gray-500">No profiles found.</div>
             ) : viewMode === "cards" ? (
-                        <>{/*
+                <>{/*
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                         {pageProfiles.map((p) => (
                             <div key={p.userId} className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
@@ -591,7 +636,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                                 getTopicMeta={getTopicMeta}
                                 dataset={dataset}
                                 metric={metric}
-                                
+
                             />
                         ))}
                     </div>
@@ -770,7 +815,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                     <button onClick={() => setCurrentPage((cp) => Math.min(totalPages, cp + 1))} disabled={currentPage === totalPages} className="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 disabled:opacity-50">Next →</button>
                 </div>
             )}
-            
+
         </div>
     );
 }

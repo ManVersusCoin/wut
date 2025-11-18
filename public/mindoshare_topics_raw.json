@@ -1,0 +1,440 @@
+[
+  {
+    "id": "16e06aa3-f80c-4685-a348-653d37c69b52",
+    "stage": null,
+    "featured": true,
+    "hidden": false,
+    "mindshare": 0.44348208125,
+    "twitterId": "1055894724245155841",
+    "twitterUsername": "avax",
+    "twitterDisplayName": "Avalanche🔺",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1970156760116944897/06WZz7t4_200x200.jpg",
+    "twitterDescription": "Your L1 for your own needs. Powered by Avalanche. \n\nRT≠endorsements.\n\nhttp://avax.network.",
+    "twitterDescriptionLink": null,
+    "twitterFollowersCount": 1122875,
+    "twitterFollowingCount": 988,
+    "twitterIsVerified": true,
+    "twitterGoldBadge": true,
+    "twitterLang": "",
+    "twitterCreatedAt": "2018-10-26T18:51:34.000Z",
+    "coinSymbol": "avax",
+    "coinMarketCap": 9800370000,
+    "coinPrice": 23.2,
+    "coinContractAddress": null,
+    "coinName": "Avalanche",
+    "coinImageUrl": "https://coin-images.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png?1696512369",
+    "socialLinks": null,
+    "createdAt": "2025-07-25T07:57:05.594Z",
+    "updatedAt": "2025-11-17T13:50:21.440Z",
+    "fetchedAt": "2025-11-17T13:50:17.827Z",
+    "narrativeLinks": [
+      {
+        "mindsharePercent": 1.38125,
+        "narrative": {
+          "id": "cmdiini0d001xxyd5ij2yt1py",
+          "name": "Layer 1",
+          "slug": "layer-1",
+          "mindsharePercent": 32.1073,
+          "totalViews": 2522870912
+        }
+      }
+    ],
+    "rewardPools": [
+      {
+        "id": "cmedzmxu30000xymlo1ct1bqk",
+        "title": "$30K to the top 100 minders",
+        "description": "",
+        "reward": "",
+        "rewardRate": 0,
+        "rewardUnit": "",
+        "deadline": "2025-09-18T00:00:00.000Z",
+        "startDate": "2025-08-18T00:00:00.000Z",
+        "endDate": "2025-09-18T00:00:00.000Z",
+        "platforms": [
+          "Twitter"
+        ],
+        "status": "closed",
+        "type": "campaign",
+        "paymentCurrency": "USDT",
+        "totalAmountUsd": 30000,
+        "paidOutUsd": 30000,
+        "campaignTargetViews": 0,
+        "participantsCount": 0,
+        "completedCount": 0,
+        "requirements": [],
+        "projectId": "16e06aa3-f80c-4685-a348-653d37c69b52"
+      }
+    ],
+    "topicSlug": "avalanche",
+    "logoUrl": "/avalanche.png"
+  },
+  {
+    "id": "19cc568d-66e7-487f-a9fb-10e2c7b1304c",
+    "stage": null,
+    "featured": true,
+    "hidden": false,
+    "mindshare": 0.204850392386,
+    "twitterId": "1304003606266474496",
+    "twitterUsername": "CryptoRubic",
+    "twitterDisplayName": "Rubic",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1965705110043967488/TUJOs4nC_200x200.jpg",
+    "twitterDescription": "Rubic. Your Best Rate Finder across 70+ chains and 360+ DEXs, bridges, aggregators & intent protocols. For users and dApps.",
+    "twitterDescriptionLink": null,
+    "twitterFollowersCount": 217741,
+    "twitterFollowingCount": 464,
+    "twitterIsVerified": true,
+    "twitterGoldBadge": true,
+    "twitterLang": "en",
+    "twitterCreatedAt": "2020-09-10T10:28:18.000Z",
+    "coinSymbol": "rbc",
+    "coinMarketCap": 2386930,
+    "coinPrice": 0.0117478,
+    "coinContractAddress": "0x3330BFb7332cA23cd071631837dC289B09C33333",
+    "coinName": "RUBIC TOKEN",
+    "coinImageUrl": "https://coin-images.coingecko.com/coins/images/12629/small/rubic.png?1696512437",
+    "socialLinks": [
+      {
+        "link": "https://app.rubic.exchange/",
+        "title": "Main App"
+      },
+      {
+        "link": "https://rubic.exchange/",
+        "title": "Landing Page"
+      },
+      {
+        "link": "https://x.com/CryptoRubic",
+        "title": "Twitter"
+      },
+      {
+        "link": "https://www.youtube.com/c/RubicExchange/videos",
+        "title": "YouTube"
+      },
+      {
+        "link": "https://discord.com/invite/7EYzPbWKFQ",
+        "title": "Discord"
+      }
+    ],
+    "createdAt": "2025-07-25T07:53:18.977Z",
+    "updatedAt": "2025-11-17T13:50:20.761Z",
+    "fetchedAt": "2025-11-12T13:50:13.980Z",
+    "narrativeLinks": [
+      {
+        "mindsharePercent": 0.849385,
+        "narrative": {
+          "id": "cmdiin0uv000xxyd5svvlxfn3",
+          "name": "DeFi",
+          "slug": "defi",
+          "mindsharePercent": 16.8212,
+          "totalViews": 1396879608.2
+        }
+      },
+      {
+        "mindsharePercent": 0.85091,
+        "narrative": {
+          "id": "cmdiin3ir0013xyd5f2rmxe4d",
+          "name": "Chain Abstraction",
+          "slug": "chain-abstraction",
+          "mindsharePercent": 1.983,
+          "totalViews": 160483160.4
+        }
+      },
+      {
+        "mindsharePercent": 1.2704,
+        "narrative": {
+          "id": "cmdiinmb90026xyd5bfvtltvz",
+          "name": "Omnichain",
+          "slug": "omnichain",
+          "mindsharePercent": 0.97886,
+          "totalViews": 85383932.2
+        }
+      },
+      {
+        "mindsharePercent": 2.33329,
+        "narrative": {
+          "id": "cmdiin5080016xyd51my9uhdo",
+          "name": "Modularity",
+          "slug": "modularity",
+          "mindsharePercent": 1.39994,
+          "totalViews": 117230011.8
+        }
+      }
+    ],
+    "rewardPools": [
+      {
+        "id": "cmfgpgjis0000xyr73b77uux8",
+        "title": "$30K to the top 100 minders",
+        "description": "",
+        "reward": "",
+        "rewardRate": 0,
+        "rewardUnit": "",
+        "deadline": null,
+        "startDate": "2025-09-16T00:00:00.000Z",
+        "endDate": "2025-10-16T00:00:00.000Z",
+        "platforms": [
+          "Twitter"
+        ],
+        "status": "closed",
+        "type": "campaign",
+        "paymentCurrency": "USDT",
+        "totalAmountUsd": 30000,
+        "paidOutUsd": 30000,
+        "campaignTargetViews": 0,
+        "participantsCount": 0,
+        "completedCount": 0,
+        "requirements": [],
+        "projectId": "19cc568d-66e7-487f-a9fb-10e2c7b1304c"
+      }
+    ],
+    "topicSlug": "rubic",
+    "logoUrl": "/rubic.png"
+  },
+  {
+    "id": "2973e5ba-68fc-4efa-bf92-230d2b4954c5",
+    "stage": "",
+    "featured": true,
+    "hidden": false,
+    "mindshare": 0.03,
+    "twitterId": "1022556475850256384",
+    "twitterUsername": "useTria",
+    "twitterDisplayName": "Tria",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1947271337057079296/_smOX_4e_200x200.jpg",
+    "twitterDescription": "A self-custodial neobank that unifies trading, spending, and earning in a single app - with no bridges, no gas, and no intermediaries. Pay, trade, and earn yield across any network and currency!\n\nTria has raised $12M and partnered with 70+ top protocols, including Arbitrum, Polygon, Injective, Sentient, Aethir, and Katana.",
+    "twitterDescriptionLink": null,
+    "twitterFollowersCount": 75929,
+    "twitterFollowingCount": 7,
+    "twitterIsVerified": true,
+    "twitterGoldBadge": true,
+    "twitterLang": "",
+    "twitterCreatedAt": "2018-07-26T18:57:16.000Z",
+    "coinSymbol": "",
+    "coinMarketCap": 0,
+    "coinPrice": 0,
+    "coinContractAddress": "",
+    "coinName": "",
+    "coinImageUrl": "",
+    "socialLinks": [
+      {
+        "link": "https://tria.so/",
+        "title": "Website"
+      },
+      {
+        "link": "https://twitter.com/useTria",
+        "title": "Twitter/X"
+      },
+      {
+        "link": "https://discord.gg/myQFsc83pv",
+        "title": "Discord"
+      },
+      {
+        "link": "https://linktr.ee/usetria",
+        "title": "Linktree"
+      }
+    ],
+    "createdAt": "2025-10-11T14:38:01.123Z",
+    "updatedAt": "2025-10-14T12:54:03.376Z",
+    "fetchedAt": "2025-10-11T14:38:01.123Z",
+    "narrativeLinks": [],
+    "rewardPools": [
+      {
+        "id": "cmgqjevss0000xyq45xdw9sxx",
+        "title": "$120K $TRIA ($40K/Month) to the top 100 minders",
+        "description": "",
+        "reward": "",
+        "rewardRate": 0,
+        "rewardUnit": "",
+        "deadline": null,
+        "startDate": "2025-10-14T00:00:00.000Z",
+        "endDate": "2026-01-14T00:00:00.000Z",
+        "platforms": [
+          "Twitter"
+        ],
+        "status": "active",
+        "type": "campaign",
+        "paymentCurrency": "TRIA",
+        "totalAmountUsd": 120000,
+        "paidOutUsd": 34100,
+        "campaignTargetViews": 0,
+        "participantsCount": 0,
+        "completedCount": 0,
+        "requirements": [],
+        "projectId": "2973e5ba-68fc-4efa-bf92-230d2b4954c5"
+      }
+    ],
+    "topicSlug": "tria",
+    "logoUrl": "/tria.jpg"
+  },
+  {
+    "id": "8453d816-d0cb-4242-b864-ccdf1946febd",
+    "stage": "",
+    "featured": true,
+    "hidden": false,
+    "mindshare": 0.01,
+    "twitterId": "1250422746770620430",
+    "twitterUsername": "MyCoralApp",
+    "twitterDisplayName": "CoralApp",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1972782913881006080/TgYvNP4l_400x400.jpg",
+    "twitterDescription": "The 1st mobile ecosystem crafted for multi-chain landscape｜Incubated by @YziLabs｜Empowering web3 through AI inference",
+    "twitterDescriptionLink": null,
+    "twitterFollowersCount": 90918,
+    "twitterFollowingCount": 113,
+    "twitterIsVerified": true,
+    "twitterGoldBadge": true,
+    "twitterLang": "",
+    "twitterCreatedAt": "2020-04-15T13:56:45.000Z",
+    "coinSymbol": "",
+    "coinMarketCap": 0,
+    "coinPrice": 0,
+    "coinContractAddress": "",
+    "coinName": "",
+    "coinImageUrl": "",
+    "socialLinks": null,
+    "createdAt": "2025-08-14T05:36:10.579Z",
+    "updatedAt": "2025-08-14T05:45:13.303Z",
+    "fetchedAt": "2025-08-14T05:36:10.579Z",
+    "narrativeLinks": [],
+    "rewardPools": [
+      {
+        "id": "cmeebz52c0000nz3w01inzgpx",
+        "title": "$30K to the top 100 minders",
+        "description": "",
+        "reward": "",
+        "rewardRate": 0,
+        "rewardUnit": "",
+        "deadline": null,
+        "startDate": "2025-08-18T00:00:00.000Z",
+        "endDate": "2025-09-18T00:00:00.000Z",
+        "platforms": [
+          "Twitter"
+        ],
+        "status": "closed",
+        "type": "campaign",
+        "paymentCurrency": "USDT",
+        "totalAmountUsd": 30000,
+        "paidOutUsd": 30000,
+        "campaignTargetViews": 0,
+        "participantsCount": 0,
+        "completedCount": 0,
+        "requirements": [],
+        "projectId": "8453d816-d0cb-4242-b864-ccdf1946febd"
+      }
+    ],
+    "topicSlug": "coralapp",
+    "logoUrl": "/coralapp.jpg"
+  },
+  {
+    "id": "0cace7b0-f488-4d0a-803d-b2cca192eb2b",
+    "stage": "",
+    "featured": true,
+    "hidden": false,
+    "mindshare": 0.024,
+    "twitterId": "1937544417835130880",
+    "twitterUsername": "MindoAI",
+    "twitterDisplayName": "Mindo AI",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1957881940905979907/8PQntyUv_400x400.jpg",
+    "twitterDescription": "The attention-to-capital engine of crypto—AI-native, on-chain aware, and built to score real influence, price belief, and prove ROI.",
+    "twitterDescriptionLink": null,
+    "twitterFollowersCount": 38321,
+    "twitterFollowingCount": 8,
+    "twitterIsVerified": true,
+    "twitterGoldBadge": false,
+    "twitterLang": "",
+    "twitterCreatedAt": "2025-06-24T16:12:58.000Z",
+    "coinSymbol": "",
+    "coinMarketCap": 0,
+    "coinPrice": 0,
+    "coinContractAddress": "",
+    "coinName": "",
+    "coinImageUrl": "",
+    "socialLinks": null,
+    "createdAt": "2025-08-14T05:44:17.945Z",
+    "updatedAt": "2025-09-06T07:08:45.639Z",
+    "fetchedAt": "2025-08-14T05:44:17.945Z",
+    "narrativeLinks": [],
+    "rewardPools": [
+      {
+        "id": "cmefdbsrm06rjqh3w9cy4stj3",
+        "title": "$100K MND ($33.3K/Month) to the top 100 minders",
+        "description": "",
+        "reward": "",
+        "rewardRate": 0,
+        "rewardUnit": "",
+        "deadline": null,
+        "startDate": "2025-08-18T00:00:00.000Z",
+        "endDate": "2025-11-18T00:00:00.000Z",
+        "platforms": [
+          "Twitter"
+        ],
+        "status": "active",
+        "type": "campaign",
+        "paymentCurrency": "MINDO_TOKEN",
+        "totalAmountUsd": 100000,
+        "paidOutUsd": 66666,
+        "campaignTargetViews": 0,
+        "participantsCount": 0,
+        "completedCount": 0,
+        "requirements": [],
+        "projectId": "0cace7b0-f488-4d0a-803d-b2cca192eb2b"
+      }
+    ],
+    "topicSlug": "mindo_ai",
+    "logoUrl": "/mindo_ai.jpg"
+  },
+  {
+    "id": "a9a544fb-59c9-4ed2-bc83-866a72793381",
+    "stage": "",
+    "featured": true,
+    "hidden": false,
+    "mindshare": 0.01,
+    "twitterId": "1458007981031833608",
+    "twitterUsername": "elympics_ai",
+    "twitterDisplayName": "Elympics",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1946319759991242752/G9OQ5zaG_200x200.jpg",
+    "twitterDescription": "Multichain entertainment infra bridging global IPs to Play2Win games across superapps.",
+    "twitterDescriptionLink": null,
+    "twitterFollowersCount": 213820,
+    "twitterFollowingCount": 508,
+    "twitterIsVerified": true,
+    "twitterGoldBadge": true,
+    "twitterLang": "",
+    "twitterCreatedAt": "2021-11-09T09:47:39.000Z",
+    "coinSymbol": "",
+    "coinMarketCap": 0,
+    "coinPrice": 0,
+    "coinContractAddress": "",
+    "coinName": "",
+    "coinImageUrl": "",
+    "socialLinks": null,
+    "createdAt": "2025-08-14T05:35:47.986Z",
+    "updatedAt": "2025-08-14T05:44:57.272Z",
+    "fetchedAt": "2025-08-14T05:35:47.986Z",
+    "narrativeLinks": [],
+    "rewardPools": [
+      {
+        "id": "cmeec0bxo0001nz3w1i95dk2b",
+        "title": "$30K to the top 100 minders",
+        "description": "",
+        "reward": "",
+        "rewardRate": 0,
+        "rewardUnit": "",
+        "deadline": null,
+        "startDate": "2025-08-18T00:00:00.000Z",
+        "endDate": "2025-09-18T00:00:00.000Z",
+        "platforms": [
+          "Twitter"
+        ],
+        "status": "closed",
+        "type": "campaign",
+        "paymentCurrency": "USDT",
+        "totalAmountUsd": 30000,
+        "paidOutUsd": 30000,
+        "campaignTargetViews": 0,
+        "participantsCount": 0,
+        "completedCount": 0,
+        "requirements": [],
+        "projectId": "a9a544fb-59c9-4ed2-bc83-866a72793381"
+      }
+    ],
+    "topicSlug": "elympics",
+    "logoUrl": "/elympics.jpg"
+  }
+]

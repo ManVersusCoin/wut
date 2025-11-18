@@ -52,7 +52,7 @@ export default function LeagueLeaderboard(): JSX.Element {
     const [loading, setLoading] = useState(true);
 
     const [dataset, setDataset] = useState<"tournament" | "7d" | "30d">("tournament");
-    const [topLimit, setTopLimit] = useState<number>(500);
+    const [topLimit, setTopLimit] = useState<number>(1000);
     const [profileSearch, setProfileSearch] = useState("");
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
@@ -170,12 +170,35 @@ export default function LeagueLeaderboard(): JSX.Element {
         let arr: (ProfileForCard & { __score?: number })[] = derivedProfiles.map((p) => {
             const ranksFiltered: Record<string, any> = {};
             for (const [slug, r] of Object.entries(p.ranks)) {
+                // Étape 1 : Applique la limite 'topLimit'
                 if (typeof r.rankTotal === "number" && r.rankTotal <= topLimit) {
                     ranksFiltered[slug] = { ...r };
                 }
             }
             return { ...p, ranksFiltered } as ProfileForCard;
         });
+
+        // NOUVELLE LOGIQUE CRITIQUE : Filtrer les ranks internes par les topics sélectionnés
+        if (selectedTopics.length > 0) {
+            arr = arr.map(p => {
+                const newRanksFiltered: Record<string, any> = {};
+                for (const slug of selectedTopics) {
+                    // Conserve le rank uniquement s'il a passé le filtre topLimit (via p.ranksFiltered)
+                    // ET s'il fait partie des topics sélectionnés
+                    if (p.ranksFiltered[slug]) {
+                        newRanksFiltered[slug] = p.ranksFiltered[slug];
+                    }
+                }
+                // Le profil est mis à jour avec UNIQUEMENT les ranks des topics sélectionnés
+                return {
+                    ...p,
+                    ranksFiltered: newRanksFiltered,
+                };
+            });
+
+            // L'ancienne étape de filtrage des PROFILES est implicitement gérée par le filtre final ci-dessous.
+            // On s'assure ainsi que seuls les ranks sélectionnés affectent les métriques.
+        }
 
 
         if (profileSearch.trim()) {
@@ -185,13 +208,7 @@ export default function LeagueLeaderboard(): JSX.Element {
             );
         }
 
-
-        if (selectedTopics.length > 0) {
-            arr = arr.filter((p) =>
-                selectedTopics.some((s) => p.ranksFiltered && p.ranksFiltered[s])
-            );
-        }
-
+       
 
         if (topicCountFilter) {
             arr = arr.filter((p) => Object.keys(p.ranksFiltered).length === topicCountFilter);
@@ -235,9 +252,10 @@ export default function LeagueLeaderboard(): JSX.Element {
         }
 
 
+        // Filtre final : retire les profils qui n'ont plus d'entrées de classement
+        // (parce qu'elles ont été filtrées par selectedTopics ou topLimit).
         return arr.filter((p) => Object.keys(p.ranksFiltered).length > 0);
     }, [derivedProfiles, selectedTopics, profileSearch, topLimit, sortConfig, topicCountFilter]);
-
 
     const topicCountOptions = useMemo(() => {
         const counts: Record<number, number> = {};
@@ -250,14 +268,29 @@ export default function LeagueLeaderboard(): JSX.Element {
             .sort((a, b) => a.count - b.count);
     }, [filteredProfiles]);
 
-    // Calculate the number of leaderboard entries
-    const leaderboardEntriesCount = useMemo(() => {
-        let count = 0;
+
+    const activeTopicSlugs = useMemo(() => {
+        const slugs = new Set<string>();
         filteredProfiles.forEach((p) => {
-            count += Object.keys(p.ranksFiltered || {}).length;
+            Object.keys(p.ranksFiltered || {}).forEach((s) => slugs.add(s));
         });
-        return count;
+        return Array.from(slugs);
     }, [filteredProfiles]);
+
+    const activeTopicsCount = activeTopicSlugs.length;
+
+    const visibleLeaderboardEntriesCount = useMemo(() => {
+        return filteredProfiles.reduce((count, p) => {
+            return count + Object.keys(p.ranksFiltered || {}).length;
+        }, 0);
+    }, [filteredProfiles]);
+
+    const filteredProfilesCount = filteredProfiles.length;
+    const profileCoverageRatio = useMemo(() => {
+        if (visibleLeaderboardEntriesCount === 0) return 0;
+        return (filteredProfilesCount / visibleLeaderboardEntriesCount) * 100;
+    }, [filteredProfilesCount, visibleLeaderboardEntriesCount]);
+
 
     const totalPages = Math.max(1, Math.ceil(filteredProfiles.length / itemsPerPage));
     const start = (currentPage - 1) * itemsPerPage;
@@ -276,10 +309,18 @@ export default function LeagueLeaderboard(): JSX.Element {
         });
     };
 
+    const handleSelectAllTopics = () => {
+        setSelectedTopics(topicsForDataset.map(t => t.topicSlug));
+    };
+
+    const handleClearTopics = () => {
+        setSelectedTopics([]);
+    };
+
     return (
         <div className="space-y-6 text-gray-900 dark:text-gray-100">
             {/* Header summary */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div className="bg-gray-500 dark:bg-gray-800 rounded-xl p-4 shadow-md flex items-center">
                     <div className="flex-shrink-0 mr-4">
                         <img
@@ -302,15 +343,20 @@ export default function LeagueLeaderboard(): JSX.Element {
                 </div>
                 <div className="bg-blue-500 dark:bg-blue-800 rounded-xl p-4 shadow-md">
                     <div className="text-white text-sm font-medium">Profiles Analyzed</div>
-                    <div className="text-white text-2xl font-bold">{filteredProfiles.length}</div>
+                    <div className="text-white text-2xl font-bold">{filteredProfilesCount}</div>
                 </div>
                 <div className="bg-green-500 dark:bg-green-800 rounded-xl p-4 shadow-md">
                     <div className="text-white text-sm font-medium">Active Topics</div>
-                    <div className="text-white text-2xl font-bold">{topicsForDataset.length}</div>
+                    <div className="text-white text-2xl font-bold">{activeTopicsCount}</div> {/* MODIF HERE */}
                 </div>
                 <div className="bg-purple-500 dark:bg-purple-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
                     <div className="text-white text-sm font-medium">Leaderboard Entries</div>
-                    <div className="text-white text-2xl font-bold">{leaderboardEntriesCount}</div>
+                    <div className="text-white text-2xl font-bold">{visibleLeaderboardEntriesCount}</div> {/* MODIF HERE */}
+                </div>
+
+                <div className="bg-red-500 dark:bg-red-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
+                    <div className="text-white text-sm font-medium">Profile Coverage Ratio</div>
+                    <div className="text-white text-2xl font-bold">{profileCoverageRatio.toFixed(2)}%</div>
                 </div>
             </div>
 
@@ -342,7 +388,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                         ))}
                     </select>
 
-                    {/* Topics dropdown */}
+                    {/* Topics dropdown - MODIF HERE */}
                     <div className="relative" ref={dropdownRef}>
                         <button
                             onClick={() => setTopicDropdownOpen((o) => !o)}
@@ -370,45 +416,65 @@ export default function LeagueLeaderboard(): JSX.Element {
                         </button>
 
                         {topicDropdownOpen && (
-                            <div className="absolute z-40 mt-2 w-80 max-h-80 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg">
-                                <div className="p-2">
+                            <div className="absolute z-40 mt-2 w-80 max-h-96 overflow-hidden rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-lg">
+                                <div className="p-2 border-b border-gray-200 dark:border-gray-700">
                                     <input
                                         value={topicQuery}
                                         onChange={(e) => setTopicQuery(e.target.value)}
                                         placeholder="Search topics..."
-                                        className="w-full px-2 py-2 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm"
+                                        className="w-full px-2 py-1 rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm focus:ring-blue-500 focus:border-blue-500"
                                     />
+                                    <div className="flex justify-between mt-2">
+                                        <button
+                                            onClick={handleSelectAllTopics}
+                                            className="text-xs text-blue-500 hover:text-blue-600 font-medium"
+                                        >
+                                            Select All ({topicsForDataset.length})
+                                        </button>
+                                        <button
+                                            onClick={handleClearTopics}
+                                            className="text-xs text-red-500 hover:text-red-600 font-medium"
+                                        >
+                                            Clear
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="px-2 py-1 max-h-64 overflow-y-auto">
-                                    {visibleTopics.map((t) => {
-                                        const sel = selectedTopics.includes(t.topicSlug);
-                                        return (
-                                            <label
-                                                key={t.topicSlug}
-                                                className={`flex items-center gap-2 px-2 py-1 rounded cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 ${sel ? "bg-blue-600 text-white" : ""
-                                                    }`}
-                                            >
-                                                <input
-                                                    type="checkbox"
-                                                    checked={sel}
-                                                    onChange={() => {
-                                                        setSelectedTopics((prev) =>
-                                                            prev.includes(t.topicSlug)
-                                                                ? prev.filter((s) => s !== t.topicSlug)
-                                                                : [...prev, t.topicSlug]
-                                                        )
-                                                    }}
-                                                    className="w-4 h-4"
-                                                />
-                                                <img
-                                                    src={t.logoUrl || "/default-avatar.jpg"}
-                                                    alt={t.title}
-                                                    className="w-6 h-6 rounded-full border"
-                                                />
-                                                <span className="text-sm truncate">{t.title}</span>
-                                            </label>
-                                        );
-                                    })}
+                                <div className="p-2 max-h-64 overflow-y-auto">
+                                    {visibleTopics.length === 0 ? (
+                                        <div className="text-center text-sm text-gray-500 py-4">No topics found.</div>
+                                    ) : (
+                                        visibleTopics.map((t) => {
+                                            const sel = selectedTopics.includes(t.topicSlug);
+                                            return (
+                                                <label
+                                                    key={t.topicSlug}
+                                                    className={`flex items-center gap-2 px-2 py-1 rounded cursor-pointer transition-colors duration-100 ${sel
+                                                        ? "bg-blue-600 text-white hover:bg-blue-700"
+                                                        : "hover:bg-gray-100 dark:hover:bg-gray-800"
+                                                        }`}
+                                                >
+                                                    <input
+                                                        type="checkbox"
+                                                        checked={sel}
+                                                        onChange={() => {
+                                                            setSelectedTopics((prev) =>
+                                                                prev.includes(t.topicSlug)
+                                                                    ? prev.filter((s) => s !== t.topicSlug)
+                                                                    : [...prev, t.topicSlug]
+                                                            )
+                                                        }}
+                                                        className={`w-4 h-4 ${sel ? 'text-white bg-white border-white' : 'text-blue-600 bg-gray-100 border-gray-300'}`}
+                                                    />
+                                                    <img
+                                                        src={t.logoUrl || "/default-avatar.jpg"}
+                                                        alt={t.title}
+                                                        className="w-6 h-6 rounded-full border"
+                                                    />
+                                                    <span className={`text-sm truncate ${sel ? 'text-white' : 'text-gray-900 dark:text-gray-100'}`}>{t.title}</span>
+                                                </label>
+                                            );
+                                        })
+                                    )}
                                 </div>
                             </div>
                         )}

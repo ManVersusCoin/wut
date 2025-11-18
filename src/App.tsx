@@ -17,6 +17,7 @@ import ConsoleSimulator from "./pages/ConsoleSimulator";
 */
 import WallChainLeaderboard from "./pages/WallchainLeaderboard";
 import XeetLeagueLeaderboard from "./pages/XeetLeagueLeaderboard";
+import MindoLeaderboard from "./pages/MindoLeaderboard";
 import AirdropCardGenerator from "./pages/AirdropCardGenerator";
 import CreatorEarningsCard from "./pages/CreatorEarningsCardGenerator";
 import XeetPackGeneratorPage from "./pages/xeet/XeetPackGenerator";
@@ -38,6 +39,7 @@ export default function App() {
                     <Route path="/dad-jokes" element={<CryptoDadsTalker />} />
                     <Route path="/wallchain" element={<WallChainLeaderboard />} />
                     < Route path="/xeet-leagues" element={<XeetLeagueLeaderboard />} />
+                    < Route path="/mindo" element={<MindoLeaderboard />} />
                     < Route path="/wallchain-index" element={<FarmingIndex />} />
                     < Route path="/nft-roundup" element={<NFTRoundUpPage />} />
                     < Route path="/theplague-exodus" element={<ExodusStatsCalculator />} />

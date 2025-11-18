@@ -33,6 +33,13 @@ const links: LinkItem[] = [
         ],
     },
     {
+        label: "MindoAI",
+        logo: "/mindo.jpg",
+        children: [
+            { to: "/mindo", label: "Leaderboards Analysis", icon: Trophy },
+        ],
+    },
+    {
         label: "Miscellaneous",
         logo: "/logo.png",
         children: [
