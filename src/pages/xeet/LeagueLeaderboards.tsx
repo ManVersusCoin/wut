@@ -148,7 +148,7 @@ export default function LeagueLeaderboards(): JSX.Element {
 
     // compute global leaderboardCount: number of topic entries with chosen dataset and rank <= topLimit
     // NOTE: This calculation is preserved but is no longer used in the JSX summary to allow for dynamic filtering.
-    const leaderboardCount = useMemo(() => {
+    /*const leaderboardCount = useMemo(() => {
         let count = 0;
         for (const p of globalProfiles) {
             for (const t of p.topics) {
@@ -159,7 +159,7 @@ export default function LeagueLeaderboards(): JSX.Element {
         }
         return count;
     }, [globalProfiles, dataset, metric, topLimit]);
-
+    */
     // topic meta list used in UI (filter only topics that exist for selected dataset)
     const topicsForDataset = useMemo(() => {
         const setSlugs = new Set<string>();
