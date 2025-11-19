@@ -1,6 +1,6 @@
 ﻿import type { JSX } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowUp, ArrowDown, Filter } from "lucide-react";
+import { ArrowUp, ArrowDown } from "lucide-react";
 import InfoModal from "../../components/xeet/InfoModal";
 import RankingProfileCard from "../../components/xeet/RankingProfileCard";
 
