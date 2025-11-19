@@ -1,6 +1,6 @@
 ﻿import type { JSX } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, Filter } from "lucide-react";
 import InfoModal from "../../components/xeet/InfoModal";
 import RankingProfileCard from "../../components/xeet/RankingProfileCard";
 
@@ -21,6 +21,9 @@ type TopicEntry = {
     signalPoints?: number;
     noisePoints?: number;
     totalPoints?: number;
+    // Added noiseRatio based on your JSON update
+    noiseRatio?: number;
+    signalRatio?: number;
 };
 
 type GlobalProfile = {
@@ -52,10 +55,16 @@ export default function LeagueLeaderboards(): JSX.Element {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const [topicCountFilter, setTopicCountFilter] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
+    
+    // New Noise Ratio Filter State
+    const [noiseFilterMode, setNoiseFilterMode] = useState<"all" | "gt" | "lt">("all");
+    const [noiseThreshold, setNoiseThreshold] = useState<number>(0);
+
     const itemsPerPage = 30;
-    const viewMode = "cards";
+    const viewMode = "cards"; // Could be toggleable in future
     const [sortConfig, setSortConfig] = useState<{ slug: string; metric: string; direction: "asc" | "desc" } | null>(null);
     const [generationDate, setGenerationDate] = useState<Date | null>(null);
+
     // load once
     useEffect(() => {
         const load = async () => {
@@ -120,7 +129,16 @@ export default function LeagueLeaderboards(): JSX.Element {
     const derivedProfiles = useMemo(() => {
         // map each global profile to a simplified object with ranks per topic for the selected dataset
         const profiles = globalProfiles.map((p) => {
-            const ranks: Record<string, { rankSignal?: number; rankNoise?: number; rankTotal?: number; signalPoints?: number; noisePoints?: number; totalPoints?: number; }> = {};
+            const ranks: Record<string, { 
+                rankSignal?: number; 
+                rankNoise?: number; 
+                rankTotal?: number; 
+                signalPoints?: number; 
+                noisePoints?: number; 
+                totalPoints?: number; 
+                noiseRatio?: number; // Added
+            }> = {};
+            
             for (const t of p.topics) {
                 if (t.period !== dataset) continue;
                 ranks[t.topicSlug] = {
@@ -130,6 +148,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                     signalPoints: t.signalPoints,
                     noisePoints: t.noisePoints,
                     totalPoints: t.totalPoints,
+                    noiseRatio: t.noiseRatio,
                 };
             }
             return {
@@ -141,25 +160,9 @@ export default function LeagueLeaderboards(): JSX.Element {
             };
         });
 
-        // Filter by topLimit using the selected metric: remove topics which don't meet topLimit? Actually we keep users but per earlier logic we only consider ranks <= topLimit as existing.
-        // We will treat rank > topLimit as non-existing for filtering/sorting by selected metric.
         return profiles;
     }, [globalProfiles, dataset]);
 
-    // compute global leaderboardCount: number of topic entries with chosen dataset and rank <= topLimit
-    // NOTE: This calculation is preserved but is no longer used in the JSX summary to allow for dynamic filtering.
-    /*const leaderboardCount = useMemo(() => {
-        let count = 0;
-        for (const p of globalProfiles) {
-            for (const t of p.topics) {
-                if (t.period !== dataset) continue;
-                const val = metric === "rankTotal" ? t.rankTotal : metric === "rankSignal" ? t.rankSignal : t.rankNoise;
-                if (typeof val === "number" && val <= topLimit) count++;
-            }
-        }
-        return count;
-    }, [globalProfiles, dataset, metric, topLimit]);
-    */
     // topic meta list used in UI (filter only topics that exist for selected dataset)
     const topicsForDataset = useMemo(() => {
         const setSlugs = new Set<string>();
@@ -181,9 +184,7 @@ export default function LeagueLeaderboards(): JSX.Element {
         return topicsForDataset.filter((t) => (t.title || t.topicSlug).toLowerCase().includes(q) || t.topicSlug.toLowerCase().includes(q));
     }, [topicsForDataset, topicQuery]);
 
-    // topicCountOptions dynamic:
-    // if topics selected: compute counts for selectedTopics (exactly i of the selected)
-    // else use global counts (number of topics user appears in for this dataset)
+    // topicCountOptions dynamic
     const topicCountOptions = useMemo(() => {
         if (selectedTopics.length > 0) {
             const max = selectedTopics.length;
@@ -194,8 +195,9 @@ export default function LeagueLeaderboards(): JSX.Element {
                     let c = 0;
                     for (const s of selectedTopics) {
                         const r = p.ranks[s];
-                        // treat rank > topLimit as non-existing
                         const val = r ? (metric === "rankTotal" ? r.rankTotal : metric === "rankSignal" ? r.rankSignal : r.rankNoise) : undefined;
+                        // Note: We are not applying the noise filter in this specific count to keep it stable, 
+                        // or strictly speaking, we should. Let's keep it simple on rank limit for now.
                         if (typeof val === "number" && val <= topLimit) c++;
                     }
                     if (c === i) num++;
@@ -220,7 +222,7 @@ export default function LeagueLeaderboards(): JSX.Element {
 
     // Main filtering & sorting
     const filteredSortedProfiles = useMemo(() => {
-        // 1️⃣ Base — appliquer topLimit sur les ranks
+        // 1️⃣ Base — apply topLimit and Noise Filter
         let arr = derivedProfiles
             .map((p) => {
                 const ranksFiltered: Record<string, any> = {};
@@ -232,19 +234,29 @@ export default function LeagueLeaderboards(): JSX.Element {
                                 ? r.rankSignal
                                 : r.rankNoise;
 
-                    // ratio Noise/Signal
-                    const ratio =
-                        r.signalPoints && r.noisePoints
-                            ? (r.noisePoints / r.signalPoints) * 100
-                            : null;
+                    // Determine Ratio to use (prefer JSON field, fallback to calc)
+                    // The JSON noiseRatio is 0-1. We display percent.
+                    const rawNoiseRatio = r.noiseRatio !== undefined 
+                        ? r.noiseRatio 
+                        : (r.signalPoints && r.noisePoints ? (r.noisePoints / (r.signalPoints + r.noisePoints)) : 0);
+                    
+                    const ratioPercent = rawNoiseRatio * 100;
 
-                    if (typeof val === "number" && val <= topLimit) {
-                        ranksFiltered[slug] = { ...r, ratio };
+                    // Logic for Noise Filter
+                    let noisePass = true;
+                    if (noiseFilterMode === "gt") {
+                        if (ratioPercent <= noiseThreshold) noisePass = false;
+                    } else if (noiseFilterMode === "lt") {
+                        if (ratioPercent >= noiseThreshold) noisePass = false;
+                    }
+
+                    if (noisePass && typeof val === "number" && val <= topLimit) {
+                        ranksFiltered[slug] = { ...r, ratio: ratioPercent };
                     }
                 }
                 return { ...p, ranksFiltered };
             })
-            // 2️⃣ Filtre par recherche
+            // 2️⃣ Filter by Search
             .filter((p) => {
                 const q = profileSearch.trim().toLowerCase();
                 if (!q) return true;
@@ -253,6 +265,8 @@ export default function LeagueLeaderboards(): JSX.Element {
                     (p.handle || "").toLowerCase().includes(q)
                 );
             });
+
+        // Calculate Ratio Ranks dynamically based on current set
         const topics = new Set<string>();
         arr.forEach((p) =>
             Object.keys(p.ranksFiltered || {}).forEach((slug) => topics.add(slug))
@@ -269,14 +283,15 @@ export default function LeagueLeaderboards(): JSX.Element {
                 (p, i) => (p.ranksFiltered[slug].rankRatio = i + 1)
             );
         });
-        // 3️⃣ Filtre par topics sélectionnés
+
+        // 3️⃣ Filter by selected topics
         if (selectedTopics.length > 0) {
             arr = arr.filter((p) =>
                 selectedTopics.some((s) => p.ranksFiltered && p.ranksFiltered[s])
             );
         }
 
-        // 4️⃣ Filtre par topic overlap
+        // 4️⃣ Filter by topic overlap count
         if (topicCountFilter !== null) {
             if (selectedTopics.length > 0) {
                 arr = arr.filter((p) => {
@@ -293,10 +308,10 @@ export default function LeagueLeaderboards(): JSX.Element {
             }
         }
 
-        // 5️⃣ Supprimer les profils sans aucun classement valide
+        // 5️⃣ Remove profiles with no valid ranks after filtering
         arr = arr.filter((p) => Object.keys(p.ranksFiltered || {}).length > 0);
 
-        // 6️⃣ Si un tri manuel est actif (via clic sur Signal / Noise / Total)
+        // 6️⃣ Manual Sorting
         if (sortConfig) {
             const { slug, metric, direction } = sortConfig;
             arr.sort((a, b) => {
@@ -308,7 +323,7 @@ export default function LeagueLeaderboards(): JSX.Element {
             return arr;
         }
 
-        // 7️⃣ Sinon, tri automatique en fonction de la sélection de topics
+        // 7️⃣ Auto Sort: Single Topic
         if (selectedTopics.length === 1) {
             const slug = selectedTopics[0];
             arr.sort((a, b) => {
@@ -334,7 +349,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                 );
             });
         } else if (selectedTopics.length > 1) {
-            // 8️⃣ Si plusieurs topics → tri par meilleur rank et somme
+            // 8️⃣ Auto Sort: Multiple Topics (best rank + sum)
             arr = arr
                 .map((p) => {
                     let best = Infinity;
@@ -367,13 +382,13 @@ export default function LeagueLeaderboards(): JSX.Element {
                     );
                 });
         } else {
-            // 9️⃣ Aucun topic sélectionné → tri automatique (par score pondéré)
+            // 9️⃣ Auto Sort: Global (weighted score)
             arr = arr
                 .map((p) => {
                     const ranks = Object.values(p.ranksFiltered || {});
                     if (ranks.length === 0) return { ...p, __score: 0 };
 
-                    // méthode "points" (simple et stable)
+                    // Simple points method
                     const points = ranks
                         .map((r: any) => (r.rankTotal ? (topLimit - r.rankTotal + 1) / topLimit : 0))
                         .reduce((a, b) => a + b, 0);
@@ -395,17 +410,17 @@ export default function LeagueLeaderboards(): JSX.Element {
         topicCountFilter,
         topLimit,
         metric,
-        sortConfig, // 👈 pour déclencher un nouveau tri manuel
+        sortConfig,
+        noiseFilterMode, // Dependency added
+        noiseThreshold   // Dependency added
     ]);
 
-    // **DÉBUT DES NOUVELLES CALCULATIONS DYNAMIQUES (CORRIGÉES)**
+    // ** DYNAMIC CALCULATIONS **
 
-    // Calcule les comptes dynamiques des Topics et des Entrées à partir des profils filtrés
     const dynamicCounts = useMemo(() => {
         const activeTopics = new Set<string>();
         let leaderboardEntriesCount = 0;
 
-        // Créer un Set pour une recherche rapide si des topics sont sélectionnés
         const selectedTopicsSet = new Set(selectedTopics);
         const topicsAreFiltered = selectedTopics.length > 0;
 
@@ -413,8 +428,6 @@ export default function LeagueLeaderboards(): JSX.Element {
             const topicSlugs = Object.keys(p.ranksFiltered || {});
 
             topicSlugs.forEach(slug => {
-                // CORRECTION: Si des topics sont sélectionnés, ne compte que l'entrée et le topic 
-                // s'ils sont dans la liste sélectionnée.
                 if (!topicsAreFiltered || selectedTopicsSet.has(slug)) {
                     leaderboardEntriesCount += 1;
                     activeTopics.add(slug);
@@ -426,27 +439,22 @@ export default function LeagueLeaderboards(): JSX.Element {
             activeTopicsCount: activeTopics.size,
             leaderboardEntriesCount
         };
-    }, [filteredSortedProfiles, selectedTopics]); // Ajout de selectedTopics en dépendance
+    }, [filteredSortedProfiles, selectedTopics]);
 
     const { activeTopicsCount, leaderboardEntriesCount } = dynamicCounts;
 
-    // Calculer le nombre de profils filtrés
     const filteredProfilesCount = filteredSortedProfiles.length;
 
-    // Nouvel Indicateur : Profile Coverage Ratio = Profiles Analyzed / Leaderboard Entries
     const profileCoverageRatio = useMemo(() => {
         if (leaderboardEntriesCount === 0) return 0;
         return (filteredProfilesCount / leaderboardEntriesCount) * 100;
     }, [filteredProfilesCount, leaderboardEntriesCount]);
-
-    // **FIN DES NOUVELLES CALCULATIONS DYNAMIQUES**
 
     // pagination
     const totalPages = Math.max(1, Math.ceil(filteredSortedProfiles.length / itemsPerPage));
     useEffect(() => { if (currentPage > totalPages) setCurrentPage(1); }, [totalPages]);
     const start = (currentPage - 1) * itemsPerPage;
     const pageProfiles = filteredSortedProfiles.slice(start, start + itemsPerPage);
-
 
     const handleSort = (slug: string, metric: string) => {
         setSortConfig((prev) => {
@@ -456,7 +464,6 @@ export default function LeagueLeaderboards(): JSX.Element {
             return { slug, metric, direction: "asc" };
         });
     };
-
 
     // helpers
     const toggleTopic = (slug: string) => {
@@ -508,34 +515,39 @@ export default function LeagueLeaderboards(): JSX.Element {
                 </div>
 
                 <div className="bg-red-500 dark:bg-red-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
-                    <div className="text-white text-sm font-medium">Profile Coverage Ratio</div>
+                    <div className="text-white text-sm font-medium">Profile Uniqueness Ratio</div>
                     <div className="text-white text-2xl font-bold">{profileCoverageRatio.toFixed(2)}%</div>
                 </div>
             </div>
-            {/* Controls */}
-            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
-                <div className="flex flex-wrap items-center gap-3">
-                    <select value={dataset} onChange={(e) => { setDataset(e.target.value as any); setCurrentPage(1); }} className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800">
-                        <option value="tournament">Tournament</option>
-                        <option value="7d">7D Signals</option>
-                        <option value="30d">30D Signals</option>
-                    </select>
-
-                    {(dataset === "7d" || dataset === "30d") && (
-                        <select value={metric} onChange={(e) => { setMetric(e.target.value as any); setCurrentPage(1); }} className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800">
-                            <option value="rankTotal">Total Rank</option>
-                            <option value="rankSignal">Signal Rank</option>
-                            <option value="rankNoise">Noise Rank</option>
+            
+            {/* Controls Container */}
+            <div className="flex flex-col md:flex-row flex-wrap items-start md:items-center justify-between gap-3 bg-white dark:bg-gray-900/50 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                <div className="flex flex-wrap items-center gap-3 w-full">
+                    
+                    {/* Dataset & Metric */}
+                    <div className="flex gap-2">
+                        <select value={dataset} onChange={(e) => { setDataset(e.target.value as any); setCurrentPage(1); }} className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                            <option value="tournament">Tournament</option>
+                            <option value="7d">7D Signals</option>
+                            <option value="30d">30D Signals</option>
                         </select>
-                    )}
 
-                    <select value={topLimit} onChange={(e) => { setTopLimit(Number(e.target.value)); setCurrentPage(1); }} className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800">
-                        {TOP_OPTIONS.map((n) => <option key={n} value={n}>Top {n}</option>)}
-                    </select>
+                        {(dataset === "7d" || dataset === "30d") && (
+                            <select value={metric} onChange={(e) => { setMetric(e.target.value as any); setCurrentPage(1); }} className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                                <option value="rankTotal">Total Rank</option>
+                                <option value="rankSignal">Signal Rank</option>
+                                <option value="rankNoise">Noise Rank</option>
+                            </select>
+                        )}
 
-                    {/* Topic dropdown trigger */}
+                        <select value={topLimit} onChange={(e) => { setTopLimit(Number(e.target.value)); setCurrentPage(1); }} className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                            {TOP_OPTIONS.map((n) => <option key={n} value={n}>Top {n}</option>)}
+                        </select>
+                    </div>
+
+                    {/* Topic Dropdown */}
                     <div className="relative" ref={dropdownRef}>
-                        <button onClick={() => setTopicDropdownOpen((o) => !o)} className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800">
+                        <button onClick={() => setTopicDropdownOpen((o) => !o)} className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
                             <span>{selectedTopics.length === 0 ? "Select topics" : `${selectedTopics.length} selected`}</span>
                             <svg className="w-4 h-4" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 8l4 4 4-4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" /></svg>
                         </button>
@@ -569,23 +581,68 @@ export default function LeagueLeaderboards(): JSX.Element {
                             </div>
                         )}
                     </div>
-                    <InfoModal />
-                    <div className="flex items-center gap-3 w-full md:w-auto">
-                        <input value={profileSearch} onChange={(e) => { setProfileSearch(e.target.value); setCurrentPage(1); }} placeholder="Search profiles..." className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 w-full md:w-64" />
+
+                    {/* Noise Ratio Filter (New Feature) */}
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                        <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Noise Ratio %</span>
+                        
+                        {/* Toggle Buttons */}
+                        <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
+                            <button 
+                                onClick={() => { setNoiseFilterMode("all"); setCurrentPage(1); }} 
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${noiseFilterMode === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                All
+                            </button>
+                            <button 
+                                onClick={() => { setNoiseFilterMode("gt"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${noiseFilterMode === "gt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                &gt;
+                            </button>
+                            <button 
+                                onClick={() => { setNoiseFilterMode("lt"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${noiseFilterMode === "lt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                &lt;
+                            </button>
+                        </div>
+
+                        {/* Slider (Only if not All) */}
+                        {noiseFilterMode !== "all" && (
+                            <div className="flex items-center gap-2 ml-1">
+                                <input 
+                                    type="range" 
+                                    min="0" 
+                                    max="100" 
+                                    step="1"
+                                    value={noiseThreshold} 
+                                    onChange={(e) => { setNoiseThreshold(Number(e.target.value)); setCurrentPage(1); }}
+                                    className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
+                                />
+                                <span className="w-8 text-right font-mono text-xs text-blue-600 dark:text-blue-400">{noiseThreshold}%</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex-grow"></div>
+                    
+                    <div className="flex items-center gap-2 w-full md:w-auto">
+                        <input value={profileSearch} onChange={(e) => { setProfileSearch(e.target.value); setCurrentPage(1); }} placeholder="Search profiles..." className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 w-full md:w-64 text-sm" />
+                        <InfoModal />
                     </div>
 
                 </div>
                 {/* Last generation date */}
-                <div className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="text-xs text-gray-500 dark:text-gray-400 w-full text-right">
                     Last updated: {generationDate ? new Date(generationDate).toLocaleString() : 'N/A'}
                 </div>
-
             </div>
 
-            {/* topic-overlap filter */}
+            {/* Topic Overlap Filter */}
             <div className="flex flex-wrap gap-2">
                 {topicCountOptions.filter(opt => opt.count > 0).map((opt) => (
-                    <button key={opt.count} onClick={() => setTopicCountFilter(topicCountFilter === opt.count ? null : opt.count)} className={`px-3 py-1 rounded-md border text-sm ${topicCountFilter === opt.count ? "bg-blue-600 text-white border-blue-700" : "bg-gray-100 dark:bg-gray-800 border-gray-300 dark:border-gray-700"}`}>
+                    <button key={opt.count} onClick={() => setTopicCountFilter(topicCountFilter === opt.count ? null : opt.count)} className={`px-3 py-1 rounded-md border text-xs font-medium transition-colors ${topicCountFilter === opt.count ? "bg-blue-600 text-white border-blue-700" : "bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"}`}>
                         {opt.count} topic{opt.count > 1 ? "s" : ""}: <strong>{opt.num}</strong>
                     </button>
                 ))}
@@ -595,147 +652,93 @@ export default function LeagueLeaderboards(): JSX.Element {
             {loading ? (
                 <div className="py-20 text-center text-gray-500">Loading...</div>
             ) : filteredSortedProfiles.length === 0 ? (
-                <div className="py-10 text-center text-gray-500">No profiles found.</div>
+                <div className="py-10 text-center text-gray-500">No profiles found matching your criteria.</div>
             ) : viewMode === "cards" ? (
-                <>{/*
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {pageProfiles.map((p) => (
-                            <div key={p.userId} className="bg-gray-100 dark:bg-gray-800 rounded-xl p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                                <div className="flex items-center gap-3 mb-3">
-                                    <img src={p.avatarUrl || "/default-avatar.jpg"} alt={p.name} className="w-10 h-10 rounded-full border" />
-                                    <div className="flex flex-col min-w-0">
-                                        <a href={`https://x.com/${p.handle}`} target="_blank" rel="noreferrer" className="font-medium text-blue-600 dark:text-blue-400 truncate">@{p.handle}</a>
-                                        <span className="text-xs text-gray-600 dark:text-gray-400 truncate">{p.name}</span>
-                                    </div>
-                                </div>
-
-                                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-                                    {(selectedTopics.length > 0 ? selectedTopics.map((s) => getTopicMeta(s)) : topicsForDataset).map((tmeta) => {
-                                        const r = (p as any).ranksFiltered ? (p as any).ranksFiltered[tmeta.topicSlug] : undefined;
-                                        const display = r ? ((metric === "rankTotal" ? r.rankTotal : metric === "rankSignal" ? r.rankSignal : r.rankNoise) ?? "-") : "-";
-                                        if (display === "-" || display === 0) return null;
-                                        return (
-                                            <div key={tmeta.topicSlug} className="flex items-center gap-2 bg-gray-50 dark:bg-gray-900 px-2 py-1 rounded-md">
-                                                <img src={tmeta.logoUrl || "/default-avatar.jpg"} alt={tmeta.title} className="w-4 h-4 rounded-full border" />
-                                                <span className="truncate">{tmeta.title}</span>
-                                                <span className="ml-auto text-blue-600 dark:text-blue-400 font-semibold">#{display}</span>
-                                            </div>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        {pageProfiles.map((p) => (
-                            <RankingProfileCard
-                                p={p}
-                                selectedTopics={selectedTopics}
-                                topicsForDataset={topicsForDataset}
-                                getTopicMeta={getTopicMeta}
-                                dataset={dataset}
-                                metric={metric}
-
-                            />
-                        ))}
-                    </div>
-                </>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {pageProfiles.map((p) => (
+                        <RankingProfileCard
+                            key={p.userId}
+                            p={p}
+                            selectedTopics={selectedTopics}
+                            topicsForDataset={topicsForDataset}
+                            getTopicMeta={getTopicMeta}
+                            dataset={dataset}
+                            metric={metric}
+                            noiseFilterMode={noiseFilterMode} 
+                        />
+                    ))}
+                </div>
             ) : (
                 // TABLE VIEW — Enhanced version
-                <div className="overflow-auto border rounded">
+                <div className="overflow-auto border rounded-lg shadow-sm">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
                         <thead className="bg-gray-50 dark:bg-gray-900">
                             <tr>
-                                <th className="px-3 py-2 text-left text-xs font-medium">#</th>
-                                <th className="px-3 py-2 text-left text-xs font-medium">Profile</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">#</th>
+                                <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Profile</th>
 
                                 {(selectedTopics.length > 0 ? selectedTopics : topicsForDataset.map(t => t.topicSlug)).map((slug) => {
                                     const meta = getTopicMeta(slug);
                                     return (
-                                        <th key={slug} colSpan={4} className="px-3 py-2 text-center text-xs font-medium">
+                                        <th key={slug} colSpan={4} className="px-3 py-2 text-center text-xs font-medium border-l border-gray-200 dark:border-gray-700">
                                             <div className="flex justify-center items-center gap-2">
                                                 <img src={meta.logoUrl || "/default-avatar.jpg"} alt={meta.title} className="w-4 h-4 rounded-full" />
-                                                <div>{meta.title}</div>
+                                                <div className="text-gray-700 dark:text-gray-300 font-semibold">{meta.title}</div>
                                             </div>
                                         </th>
                                     );
                                 })}
                             </tr>
-                            <tr className="bg-gray-50 dark:bg-gray-900">
+                            <tr className="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
                                 <th></th>
                                 <th></th>
                                 {(selectedTopics.length > 0 ? selectedTopics : topicsForDataset.map(t => t.topicSlug)).flatMap((slug) => [
                                     <th
                                         key={slug + "-sig"}
-                                        className="px-3 py-1 text-xs font-medium cursor-pointer select-none hover:underline"
+                                        className="px-2 py-1 text-xs font-medium cursor-pointer select-none hover:text-blue-600 border-l border-gray-200 dark:border-gray-700"
                                         onClick={() => handleSort(slug, "rankSignal")}
                                     >
-                                        <div className="flex items-center gap-1">
-                                            Sig #
+                                        <div className="flex items-center justify-center gap-1">
+                                            Sig
                                             {sortConfig?.slug === slug && sortConfig?.metric === "rankSignal" ? (
-                                                sortConfig.direction === "asc" ? (
-                                                    <ArrowUp className="w-3 h-3 text-blue-500 inline-block" />
-                                                ) : (
-                                                    <ArrowDown className="w-3 h-3 text-blue-500 inline-block" />
-                                                )
-                                            ) : (
-                                                <ArrowUp className="w-3 h-3 text-gray-400 opacity-30 inline-block" />
-                                            )}
+                                                sortConfig.direction === "asc" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                                            ) : null}
                                         </div>
                                     </th>,
                                     <th
                                         key={slug + "-noi"}
-                                        className="px-3 py-1 text-xs font-medium cursor-pointer select-none hover:underline"
+                                        className="px-2 py-1 text-xs font-medium cursor-pointer select-none hover:text-blue-600"
                                         onClick={() => handleSort(slug, "rankNoise")}
                                     >
-                                        <div className="flex items-center gap-1">
-                                            Noise #
+                                        <div className="flex items-center justify-center gap-1">
+                                            Noise
                                             {sortConfig?.slug === slug && sortConfig?.metric === "rankNoise" ? (
-                                                sortConfig.direction === "asc" ? (
-                                                    <ArrowUp className="w-3 h-3 text-blue-500 inline-block" />
-                                                ) : (
-                                                    <ArrowDown className="w-3 h-3 text-blue-500 inline-block" />
-                                                )
-                                            ) : (
-                                                <ArrowUp className="w-3 h-3 text-gray-400 opacity-30 inline-block" />
-                                            )}
+                                                sortConfig.direction === "asc" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                                            ) : null}
                                         </div>
                                     </th>,
                                     <th
                                         key={slug + "-tot"}
-                                        className="px-3 py-1 text-xs font-medium cursor-pointer select-none hover:underline"
+                                        className="px-2 py-1 text-xs font-medium cursor-pointer select-none hover:text-blue-600"
                                         onClick={() => handleSort(slug, "rankTotal")}
                                     >
-                                        <div className="flex items-center gap-1">
-                                            Total #
+                                        <div className="flex items-center justify-center gap-1">
+                                            Total
                                             {sortConfig?.slug === slug && sortConfig?.metric === "rankTotal" ? (
-                                                sortConfig.direction === "asc" ? (
-                                                    <ArrowUp className="w-3 h-3 text-blue-500 inline-block" />
-                                                ) : (
-                                                    <ArrowDown className="w-3 h-3 text-blue-500 inline-block" />
-                                                )
-                                            ) : (
-                                                <ArrowUp className="w-3 h-3 text-gray-400 opacity-30 inline-block" />
-                                            )}
+                                                sortConfig.direction === "asc" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                                            ) : null}
                                         </div>
                                     </th>,
                                     <th
                                         key={slug + "-ratio"}
-                                        className="px-3 py-1 text-xs font-medium cursor-pointer select-none hover:underline"
+                                        className="px-2 py-1 text-xs font-medium cursor-pointer select-none hover:text-blue-600"
                                         onClick={() => handleSort(slug, "rankRatio")}
                                     >
-                                        <div className="flex items-center gap-1">
+                                        <div className="flex items-center justify-center gap-1">
                                             Ratio %
                                             {sortConfig?.slug === slug && sortConfig?.metric === "rankRatio" ? (
-                                                sortConfig.direction === "asc" ? (
-                                                    <ArrowUp className="w-3 h-3 text-blue-500 inline-block" />
-                                                ) : (
-                                                    <ArrowDown className="w-3 h-3 text-blue-500 inline-block" />
-                                                )
-                                            ) : (
-                                                <ArrowUp className="w-3 h-3 text-gray-400 opacity-30 inline-block" />
-                                            )}
+                                                sortConfig.direction === "asc" ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                                            ) : null}
                                         </div>
                                     </th>,
                                 ])}
@@ -744,20 +747,22 @@ export default function LeagueLeaderboards(): JSX.Element {
 
                         <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                             {filteredSortedProfiles.map((p, idx) => (
-                                <tr key={p.userId}>
-                                    <td className="px-3 py-2 text-xs">{idx + 1}</td>
-                                    <td className="px-3 py-2 text-sm flex items-center gap-2">
-                                        <img src={p.avatarUrl || ''} alt={p.name} className="w-6 h-6 rounded-full" />
-                                        <div>
-                                            <div className="font-medium">{p.name}</div>
-                                            <a
-                                                href={`https://x.com/${p.handle}`}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="text-xs text-blue-500 hover:underline"
-                                            >
-                                                @{p.handle}
-                                            </a>
+                                <tr key={p.userId} className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+                                    <td className="px-3 py-2 text-xs text-gray-500">{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                                    <td className="px-3 py-2 text-sm">
+                                        <div className="flex items-center gap-2">
+                                            <img src={p.avatarUrl || ''} alt={p.name} className="w-6 h-6 rounded-full" />
+                                            <div className="flex flex-col">
+                                                <span className="font-medium text-gray-900 dark:text-gray-100">{p.name}</span>
+                                                <a
+                                                    href={`https://x.com/${p.handle}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="text-xs text-blue-500 hover:underline"
+                                                >
+                                                    @{p.handle}
+                                                </a>
+                                            </div>
                                         </div>
                                     </td>
 
@@ -765,36 +770,27 @@ export default function LeagueLeaderboards(): JSX.Element {
                                         const r = p.ranksFiltered?.[slug];
                                         if (!r) {
                                             return [
-                                                <td key={slug + "-sig-" + p.userId} className="px-3 py-1 text-xs text-gray-400">-</td>,
-                                                <td key={slug + "-noi-" + p.userId} className="px-3 py-1 text-xs text-gray-400">-</td>,
-                                                <td key={slug + "-tot-" + p.userId} className="px-3 py-1 text-xs text-gray-400">-</td>,
-                                                <td key={slug + "-ratio-" + p.userId} className="px-3 py-1 text-xs text-gray-400">-</td>,
+                                                <td key={slug + "-sig-" + p.userId} className="px-3 py-2 text-xs text-center text-gray-300 border-l border-gray-200 dark:border-gray-700">-</td>,
+                                                <td key={slug + "-noi-" + p.userId} className="px-3 py-2 text-xs text-center text-gray-300">-</td>,
+                                                <td key={slug + "-tot-" + p.userId} className="px-3 py-2 text-xs text-center text-gray-300">-</td>,
+                                                <td key={slug + "-ratio-" + p.userId} className="px-3 py-2 text-xs text-center text-gray-300">-</td>,
                                             ];
                                         }
                                         return [
-                                            <td key={slug + "-sig-" + p.userId} className="px-3 py-1 text-xs">
-                                                {r.rankSignal ?? "-"}{" "}
-                                                <span className="text-gray-500 text-[10px] ml-1">
-                                                    ({r.signalPoints?.toFixed(1)})
-                                                </span>
+                                            <td key={slug + "-sig-" + p.userId} className="px-3 py-2 text-xs text-center border-l border-gray-200 dark:border-gray-700">
+                                                <span className="font-medium">{r.rankSignal ?? "-"}</span>
+                                                <div className="text-[10px] text-gray-400">{r.signalPoints?.toFixed(0)}</div>
                                             </td>,
-                                            <td key={slug + "-noi-" + p.userId} className="px-3 py-1 text-xs">
-                                                {r.rankNoise ?? "-"}{" "}
-                                                <span className="text-gray-500 text-[10px] ml-1">
-                                                    ({r.noisePoints?.toFixed(1)})
-                                                </span>
+                                            <td key={slug + "-noi-" + p.userId} className="px-3 py-2 text-xs text-center">
+                                                <span className="font-medium">{r.rankNoise ?? "-"}</span>
+                                                <div className="text-[10px] text-gray-400">{r.noisePoints?.toFixed(0)}</div>
                                             </td>,
-                                            <td key={slug + "-tot-" + p.userId} className="px-3 py-1 text-xs">
-                                                {r.rankTotal ?? "-"}{" "}
-                                                <span className="text-gray-500 text-[10px] ml-1">
-                                                    ({r.totalPoints?.toFixed(1)})
-                                                </span>
+                                            <td key={slug + "-tot-" + p.userId} className="px-3 py-2 text-xs text-center">
+                                                <span className="font-medium">{r.rankTotal ?? "-"}</span>
+                                                <div className="text-[10px] text-gray-400">{r.totalPoints?.toFixed(0)}</div>
                                             </td>,
-                                            <td key={slug + "-ratio-" + p.userId} className="px-3 py-1 text-xs">
-                                                {r.rankRatio ?? "-"}{" "}
-                                                <span className="text-gray-500 text-[10px] ml-1">
-                                                    ({r.ratio?.toFixed(1)}%)
-                                                </span>
+                                            <td key={slug + "-ratio-" + p.userId} className="px-3 py-2 text-xs text-center">
+                                                <span className={`font-medium ${r.ratio > 50 ? 'text-red-500' : 'text-green-600'}`}>{r.ratio?.toFixed(1)}%</span>
                                             </td>,
                                         ];
                                     })}
@@ -803,16 +799,14 @@ export default function LeagueLeaderboards(): JSX.Element {
                         </tbody>
                     </table>
                 </div>
-
-
             )}
 
             {/* Pagination controls */}
             {filteredSortedProfiles.length > itemsPerPage && (
                 <div className="flex justify-center items-center gap-3 my-4 pb-6">
-                    <button onClick={() => setCurrentPage((cp) => Math.max(1, cp - 1))} disabled={currentPage === 1} className="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 disabled:opacity-50">← Previous</button>
+                    <button onClick={() => setCurrentPage((cp) => Math.max(1, cp - 1))} disabled={currentPage === 1} className="px-3 py-1 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 disabled:opacity-50 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">← Previous</button>
                     <span className="text-sm text-gray-600 dark:text-gray-400">Page {currentPage} / {totalPages}</span>
-                    <button onClick={() => setCurrentPage((cp) => Math.min(totalPages, cp + 1))} disabled={currentPage === totalPages} className="px-3 py-1 rounded-md bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-700 disabled:opacity-50">Next →</button>
+                    <button onClick={() => setCurrentPage((cp) => Math.min(totalPages, cp + 1))} disabled={currentPage === totalPages} className="px-3 py-1 rounded-md bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 disabled:opacity-50 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">Next →</button>
                 </div>
             )}
 

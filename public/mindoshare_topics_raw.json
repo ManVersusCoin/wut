@@ -4,7 +4,7 @@
     "stage": null,
     "featured": true,
     "hidden": false,
-    "mindshare": 0.44348208125,
+    "mindshare": 0.42049999593,
     "twitterId": "1055894724245155841",
     "twitterUsername": "avax",
     "twitterDisplayName": "Avalanche🔺",
@@ -25,17 +25,17 @@
     "coinImageUrl": "https://coin-images.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png?1696512369",
     "socialLinks": null,
     "createdAt": "2025-07-25T07:57:05.594Z",
-    "updatedAt": "2025-11-17T13:50:21.440Z",
-    "fetchedAt": "2025-11-17T13:50:17.827Z",
+    "updatedAt": "2025-11-18T13:50:21.009Z",
+    "fetchedAt": "2025-11-18T13:50:16.444Z",
     "narrativeLinks": [
       {
-        "mindsharePercent": 1.38125,
+        "mindsharePercent": 1.29997,
         "narrative": {
           "id": "cmdiini0d001xxyd5ij2yt1py",
           "name": "Layer 1",
           "slug": "layer-1",
-          "mindsharePercent": 32.1073,
-          "totalViews": 2522870912
+          "mindsharePercent": 32.3469,
+          "totalViews": 2537651878
         }
       }
     ],
@@ -73,7 +73,7 @@
     "stage": null,
     "featured": true,
     "hidden": false,
-    "mindshare": 0.204850392386,
+    "mindshare": 0.201383041647,
     "twitterId": "1304003606266474496",
     "twitterUsername": "CryptoRubic",
     "twitterDisplayName": "Rubic",
@@ -115,7 +115,7 @@
       }
     ],
     "createdAt": "2025-07-25T07:53:18.977Z",
-    "updatedAt": "2025-11-17T13:50:20.761Z",
+    "updatedAt": "2025-11-18T13:50:20.331Z",
     "fetchedAt": "2025-11-12T13:50:13.980Z",
     "narrativeLinks": [
       {
@@ -124,8 +124,8 @@
           "id": "cmdiin0uv000xxyd5svvlxfn3",
           "name": "DeFi",
           "slug": "defi",
-          "mindsharePercent": 16.8212,
-          "totalViews": 1396879608.2
+          "mindsharePercent": 16.6215,
+          "totalViews": 1407858481
         }
       },
       {
@@ -134,8 +134,8 @@
           "id": "cmdiin3ir0013xyd5f2rmxe4d",
           "name": "Chain Abstraction",
           "slug": "chain-abstraction",
-          "mindsharePercent": 1.983,
-          "totalViews": 160483160.4
+          "mindsharePercent": 1.93197,
+          "totalViews": 159434816.6
         }
       },
       {
@@ -144,8 +144,8 @@
           "id": "cmdiinmb90026xyd5bfvtltvz",
           "name": "Omnichain",
           "slug": "omnichain",
-          "mindsharePercent": 0.97886,
-          "totalViews": 85383932.2
+          "mindsharePercent": 0.965329,
+          "totalViews": 85134727.2
         }
       },
       {
@@ -154,8 +154,8 @@
           "id": "cmdiin5080016xyd51my9uhdo",
           "name": "Modularity",
           "slug": "modularity",
-          "mindsharePercent": 1.39994,
-          "totalViews": 117230011.8
+          "mindsharePercent": 1.35001,
+          "totalViews": 116804550.4
         }
       }
     ],

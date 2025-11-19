@@ -1,5 +1,5 @@
 {
-  "generationDate": "2025-11-18T10:40:25.363Z",
+  "generationDate": "2025-11-19T07:23:11.687Z",
   "profiles": [
     {
       "handle": "eeelistar",
@@ -67,7 +67,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 4,
-          "totalPoints": 984192.3753983799
+          "totalPoints": 984467.7747579364
         }
       ]
     },
@@ -112,7 +112,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 7,
-          "totalPoints": 758737.9772694099
+          "totalPoints": 758748.7899481328
         }
       ]
     },
@@ -144,7 +144,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 9,
-          "totalPoints": 678337.7823795958
+          "totalPoints": 677201.6502186251
         },
         {
           "topicSlug": "mindo_ai",
@@ -163,7 +163,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 10,
-          "totalPoints": 651861.0216452059
+          "totalPoints": 658763.8916237997
         },
         {
           "topicSlug": "mindo_ai",
@@ -265,7 +265,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 16,
-          "totalPoints": 555542.9943524657
+          "totalPoints": 555546.0249399015
         },
         {
           "topicSlug": "mindo_ai",
@@ -297,7 +297,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 18,
-          "totalPoints": 510558.2019260296
+          "totalPoints": 517831.1107853747
         }
       ]
     },
@@ -310,7 +310,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 19,
-          "totalPoints": 501710.86217114923
+          "totalPoints": 505177.85019925324
         },
         {
           "topicSlug": "mindo_ai",
@@ -329,7 +329,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 20,
-          "totalPoints": 481190.6582395437
+          "totalPoints": 481902.47873989807
         },
         {
           "topicSlug": "mindo_ai",
@@ -378,19 +378,6 @@
       ]
     },
     {
-      "handle": "TimHaldorsson",
-      "name": "Tim Haldorsson",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1928091512484556800/Toeoufns_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 23,
-          "totalPoints": 424205.3013473568
-        }
-      ]
-    },
-    {
       "handle": "kingfxyo",
       "name": "fxyo",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1978262186498621440/eIUxVIIf_200x200.jpg",
@@ -398,8 +385,21 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
+          "rankTotal": 23,
+          "totalPoints": 430525.9802027432
+        }
+      ]
+    },
+    {
+      "handle": "TimHaldorsson",
+      "name": "Tim Haldorsson",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1928091512484556800/Toeoufns_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
           "rankTotal": 24,
-          "totalPoints": 422084.2943164149
+          "totalPoints": 424205.3013473568
         }
       ]
     },
@@ -527,7 +527,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 32,
-          "totalPoints": 356247.7814411922
+          "totalPoints": 360467.5729297895
         },
         {
           "topicSlug": "mindo_ai",
@@ -559,7 +559,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 34,
-          "totalPoints": 343345.2925429004
+          "totalPoints": 348359.7856470493
         }
       ]
     },
@@ -591,7 +591,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 36,
-          "totalPoints": 314282.6211863928
+          "totalPoints": 318354.95835758024
         }
       ]
     },
@@ -623,7 +623,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 38,
-          "totalPoints": 305259.180450508
+          "totalPoints": 305259.3637928275
         },
         {
           "topicSlug": "mindo_ai",
@@ -680,7 +680,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 41,
-          "totalPoints": 290233.3257522018
+          "totalPoints": 287021.8919956076
         },
         {
           "topicSlug": "mindo_ai",
@@ -731,7 +731,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 44,
-          "totalPoints": 270088.09490142914
+          "totalPoints": 277590.54198202444
         }
       ]
     },
@@ -744,7 +744,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 45,
-          "totalPoints": 268972.03689595865
+          "totalPoints": 268803.14520104666
         },
         {
           "topicSlug": "mindo_ai",
@@ -789,7 +789,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 48,
-          "totalPoints": 248557.0359730673
+          "totalPoints": 248808.86680991945
         },
         {
           "topicSlug": "mindo_ai",
@@ -808,7 +808,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 49,
-          "totalPoints": 245885.95700444534
+          "totalPoints": 246238.7345611232
         },
         {
           "topicSlug": "mindo_ai",
@@ -827,7 +827,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 50,
-          "totalPoints": 238702.34087636447
+          "totalPoints": 237490.65386683977
         }
       ]
     },
@@ -840,7 +840,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 51,
-          "totalPoints": 235386.69096469998
+          "totalPoints": 236782.8160593898
         },
         {
           "topicSlug": "mindo_ai",
@@ -936,7 +936,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 57,
-          "totalPoints": 211379.81716486838
+          "totalPoints": 211380.16954138695
         },
         {
           "topicSlug": "mindo_ai",
@@ -1156,6 +1156,25 @@
       ]
     },
     {
+      "handle": "Vanquan_titans",
+      "name": "Van Quan I 🌊RIVER | Bird🕊️",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1945800175638683648/8yG5t6dA_200x200.png",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 69,
+          "totalPoints": 144207.77438511813
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 141,
+          "totalPoints": 59374.35389688857
+        }
+      ]
+    },
+    {
       "handle": "nftchains",
       "name": "SAMtheToshis🫡",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1973725496966828032/h1xwsUKP_200x200.jpg",
@@ -1163,7 +1182,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 69,
+          "rankTotal": 70,
           "totalPoints": 143721.24861583754
         }
       ]
@@ -1176,7 +1195,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 70,
+          "rankTotal": 71,
           "totalPoints": 138895.5194193695
         }
       ]
@@ -1189,7 +1208,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 71,
+          "rankTotal": 72,
           "totalPoints": 130749.02859796832
         },
         {
@@ -1197,25 +1216,6 @@
           "period": "tournament",
           "rankTotal": 50,
           "totalPoints": 309379.2494384669
-        }
-      ]
-    },
-    {
-      "handle": "Vanquan_titans",
-      "name": "Van Quan I 🌊RIVER | Bird🕊️",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1945800175638683648/8yG5t6dA_200x200.png",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 72,
-          "totalPoints": 129482.33263452508
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 141,
-          "totalPoints": 59374.35389688857
         }
       ]
     },
@@ -1292,26 +1292,13 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 77,
-          "totalPoints": 124890.13659876266
+          "totalPoints": 125013.22730396657
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 61,
           "totalPoints": 264435.6722311268
-        }
-      ]
-    },
-    {
-      "handle": "defi_blackjoker",
-      "name": "BLACK JOKER ◉⁠‿⁠◉",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1741877290571558912/ZwOveGc__200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 78,
-          "totalPoints": 121100.12628978664
         }
       ]
     },
@@ -1323,14 +1310,27 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 79,
-          "totalPoints": 115224.10448600535
+          "rankTotal": 78,
+          "totalPoints": 123335.99345132665
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 105,
           "totalPoints": 115224.52002029505
+        }
+      ]
+    },
+    {
+      "handle": "defi_blackjoker",
+      "name": "BLACK JOKER ◉⁠‿⁠◉",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1741877290571558912/ZwOveGc__200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 79,
+          "totalPoints": 121100.12628978664
         }
       ]
     },
@@ -1356,7 +1356,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 81,
-          "totalPoints": 110269.7791887991
+          "totalPoints": 110272.2262512595
         },
         {
           "topicSlug": "mindo_ai",
@@ -1451,26 +1451,13 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 86,
-          "totalPoints": 101892.37348082669
+          "totalPoints": 102305.19543989663
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 58,
           "totalPoints": 273802.5065396595
-        }
-      ]
-    },
-    {
-      "handle": "wjf110",
-      "name": "好家伙🥊",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1568617853930307584/D-4SOnGT_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 87,
-          "totalPoints": 100299.7516064792
         }
       ]
     },
@@ -1482,14 +1469,27 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 88,
-          "totalPoints": 98414.88652850348
+          "rankTotal": 87,
+          "totalPoints": 100554.34058347096
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 93,
           "totalPoints": 139236.00658079993
+        }
+      ]
+    },
+    {
+      "handle": "wjf110",
+      "name": "好家伙🥊",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1568617853930307584/D-4SOnGT_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 88,
+          "totalPoints": 100299.7516064792
         }
       ]
     },
@@ -1584,25 +1584,6 @@
       ]
     },
     {
-      "handle": "NFTMani_eth",
-      "name": "MANI",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1895416690231353344/oVG9GC0O_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 95,
-          "totalPoints": 86408.96988596118
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 125,
-          "totalPoints": 86408.96988596118
-        }
-      ]
-    },
-    {
       "handle": "CryptoBTCSZ",
       "name": "Crypto圣泽 $M | 🐜",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1945895241225048064/FjgLHJl7_200x200.png",
@@ -1610,7 +1591,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 96,
+          "rankTotal": 95,
           "totalPoints": 86287.93610262017
         },
         {
@@ -1618,6 +1599,25 @@
           "period": "tournament",
           "rankTotal": 64,
           "totalPoints": 243185.82249480675
+        }
+      ]
+    },
+    {
+      "handle": "NFTMani_eth",
+      "name": "MANI",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1895416690231353344/oVG9GC0O_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 96,
+          "totalPoints": 86280.57617142037
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 125,
+          "totalPoints": 86408.96988596118
         }
       ]
     },
@@ -1681,7 +1681,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 100,
-          "totalPoints": 84369.21198569205
+          "totalPoints": 84635.36091940085
         },
         {
           "topicSlug": "mindo_ai",
@@ -1776,7 +1776,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 105,
-          "totalPoints": 80186.65966255406
+          "totalPoints": 80200.03997849737
         },
         {
           "topicSlug": "mindo_ai",
@@ -1917,7 +1917,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 114,
-          "totalPoints": 64785.71000949831
+          "totalPoints": 65135.90303657668
         }
       ]
     },
@@ -2043,19 +2043,6 @@
       ]
     },
     {
-      "handle": "vespuchi07",
-      "name": "vesp.eth",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1970977870265643008/mwuj1EcB_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 122,
-          "totalPoints": 55146.359285086444
-        }
-      ]
-    },
-    {
       "handle": "cryptoholic2200",
       "name": "CryptoHolic ✨",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1908027424568115200/b-XCOKD7_200x200.jpg",
@@ -2063,14 +2050,27 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 123,
-          "totalPoints": 52822.99715280042
+          "rankTotal": 122,
+          "totalPoints": 55541.82788860632
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 196,
           "totalPoints": 31635.410697999643
+        }
+      ]
+    },
+    {
+      "handle": "vespuchi07",
+      "name": "vesp.eth",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1970977870265643008/mwuj1EcB_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 123,
+          "totalPoints": 55146.359285086444
         }
       ]
     },
@@ -2083,7 +2083,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 124,
-          "totalPoints": 52292.0089382254
+          "totalPoints": 52292.163135985844
         },
         {
           "topicSlug": "mindo_ai",
@@ -2164,25 +2164,6 @@
       ]
     },
     {
-      "handle": "Misstang1102",
-      "name": "Miss tangⓂ️Ⓜ️T",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1985630541362970628/a5U5qzOS_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 129,
-          "totalPoints": 47429.716990819696
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 104,
-          "totalPoints": 115298.15696641285
-        }
-      ]
-    },
-    {
       "handle": "McCain889",
       "name": "Andrew",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1784231296568565761/c7nfLlir_200x200.jpg",
@@ -2190,7 +2171,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 130,
+          "rankTotal": 129,
           "totalPoints": 47305.12063333528
         }
       ]
@@ -2203,7 +2184,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 131,
+          "rankTotal": 130,
           "totalPoints": 47070.58585239998
         }
       ]
@@ -2216,7 +2197,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 132,
+          "rankTotal": 131,
           "totalPoints": 46912.94849093587
         },
         {
@@ -2235,7 +2216,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 133,
+          "rankTotal": 132,
           "totalPoints": 46584.234480160994
         },
         {
@@ -2254,7 +2235,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 134,
+          "rankTotal": 133,
           "totalPoints": 46155.634822214924
         },
         {
@@ -2273,7 +2254,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 135,
+          "rankTotal": 134,
           "totalPoints": 44897.12795117055
         }
       ]
@@ -2286,7 +2267,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 136,
+          "rankTotal": 135,
           "totalPoints": 44887.62083666639
         }
       ]
@@ -2299,7 +2280,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 137,
+          "rankTotal": 136,
           "totalPoints": 44737.851931103345
         },
         {
@@ -2318,7 +2299,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 138,
+          "rankTotal": 137,
           "totalPoints": 44349.89360113718
         },
         {
@@ -2337,7 +2318,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 139,
+          "rankTotal": 138,
           "totalPoints": 44031.73319471834
         },
         {
@@ -2345,6 +2326,25 @@
           "period": "tournament",
           "rankTotal": 395,
           "totalPoints": 6772.620409052689
+        }
+      ]
+    },
+    {
+      "handle": "Misstang1102",
+      "name": "Miss tangⓂ️Ⓜ️T",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1985630541362970628/a5U5qzOS_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 139,
+          "totalPoints": 44014.777367480674
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 104,
+          "totalPoints": 115298.15696641285
         }
       ]
     },
@@ -2453,7 +2453,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 146,
-          "totalPoints": 40557.85328951242
+          "totalPoints": 40466.91639872877
         },
         {
           "topicSlug": "mindo_ai",
@@ -2626,7 +2626,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 157,
-          "totalPoints": 32224.441954631
+          "totalPoints": 32175.98919396279
         },
         {
           "topicSlug": "mindo_ai",
@@ -2650,19 +2650,6 @@
       ]
     },
     {
-      "handle": "NefuTrades",
-      "name": "Nefu",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1971044850696118272/Fna5U7p0_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 159,
-          "totalPoints": 32000.05905346181
-        }
-      ]
-    },
-    {
       "handle": "888marui",
       "name": "Marui🐺｜InfoFi JAPAN🇯🇵🦭",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1943592974585315328/hKlV0WB1_200x200.jpg",
@@ -2670,14 +2657,27 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 160,
-          "totalPoints": 31998.580536025995
+          "rankTotal": 159,
+          "totalPoints": 32000.20252061003
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 149,
           "totalPoints": 52624.41141575341
+        }
+      ]
+    },
+    {
+      "handle": "NefuTrades",
+      "name": "Nefu",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1971044850696118272/Fna5U7p0_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 160,
+          "totalPoints": 32000.05905346181
         }
       ]
     },
@@ -2786,7 +2786,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 167,
-          "totalPoints": 29777.642713028512
+          "totalPoints": 29778.1024167213
         },
         {
           "topicSlug": "mindo_ai",
@@ -2837,7 +2837,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 170,
-          "totalPoints": 28858.92564455596
+          "totalPoints": 28861.397864058155
         },
         {
           "topicSlug": "mindo_ai",
@@ -2895,7 +2895,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 174,
-          "totalPoints": 27630.7106617521
+          "totalPoints": 27630.96776856454
         },
         {
           "topicSlug": "mindo_ai",
@@ -2914,7 +2914,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 175,
-          "totalPoints": 27094.968880114076
+          "totalPoints": 27505.498711630957
         },
         {
           "topicSlug": "mindo_ai",
@@ -3074,7 +3074,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 185,
-          "totalPoints": 25057.50338020331
+          "totalPoints": 25144.376578582553
         },
         {
           "topicSlug": "mindo_ai",
@@ -3104,25 +3104,6 @@
       ]
     },
     {
-      "handle": "naumanisrar02",
-      "name": "Nomi",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1976355966384742400/uOfaK1U0_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 187,
-          "totalPoints": 23138.762685985268
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 401,
-          "totalPoints": 6183.42658544513
-        }
-      ]
-    },
-    {
       "handle": "nvjishi",
       "name": "女技师",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1665701944495833088/pAi0XCij_200x200.jpg",
@@ -3130,7 +3111,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 188,
+          "rankTotal": 187,
           "totalPoints": 23003.417500153857
         },
         {
@@ -3138,6 +3119,25 @@
           "period": "tournament",
           "rankTotal": 173,
           "totalPoints": 40446.232328098056
+        }
+      ]
+    },
+    {
+      "handle": "naumanisrar02",
+      "name": "Nomi",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1976355966384742400/uOfaK1U0_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 188,
+          "totalPoints": 22932.166590574685
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 401,
+          "totalPoints": 6183.42658544513
         }
       ]
     },
@@ -3161,6 +3161,25 @@
       ]
     },
     {
+      "handle": "AD_MetaX",
+      "name": "AD",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1966094868763066368/vSUQEimh_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 190,
+          "totalPoints": 22906.78395710546
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 122,
+          "totalPoints": 87047.12661432545
+        }
+      ]
+    },
+    {
       "handle": "Hieu666888",
       "name": "永遠幸福 🌊RIVER",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1964556263825821696/22bhufg8_200x200.jpg",
@@ -3168,8 +3187,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 190,
-          "totalPoints": 22825.46878910078
+          "rankTotal": 191,
+          "totalPoints": 22826.031185220847
         },
         {
           "topicSlug": "mindo_ai",
@@ -3187,7 +3206,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 191,
+          "rankTotal": 192,
           "totalPoints": 22756.332473536397
         },
         {
@@ -3195,25 +3214,6 @@
           "period": "tournament",
           "rankTotal": 254,
           "totalPoints": 18210.775578004293
-        }
-      ]
-    },
-    {
-      "handle": "AD_MetaX",
-      "name": "AD",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1966094868763066368/vSUQEimh_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 192,
-          "totalPoints": 22738.351722126743
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 122,
-          "totalPoints": 87047.12661432545
         }
       ]
     },
@@ -3371,6 +3371,25 @@
       ]
     },
     {
+      "handle": "kumar58429",
+      "name": "Knox 峻峰",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1985376886885851136/C1s8qu1X_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 202,
+          "totalPoints": 20779.30470187495
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 195,
+          "totalPoints": 33678.61297294064
+        }
+      ]
+    },
+    {
       "handle": "FaaizSenpai",
       "name": "El~Faaiz (✧ᴗ✧) ☂️",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1932184873566982144/b6r379um_200x200.jpg",
@@ -3378,7 +3397,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 202,
+          "rankTotal": 203,
           "totalPoints": 20437.619349432214
         }
       ]
@@ -3391,7 +3410,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 203,
+          "rankTotal": 204,
           "totalPoints": 20328.816185609256
         },
         {
@@ -3410,7 +3429,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 204,
+          "rankTotal": 205,
           "totalPoints": 20319.323081260816
         },
         {
@@ -3418,25 +3437,6 @@
           "period": "tournament",
           "rankTotal": 191,
           "totalPoints": 35354.020916694404
-        }
-      ]
-    },
-    {
-      "handle": "kumar58429",
-      "name": "Knox 峻峰",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1985376886885851136/C1s8qu1X_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 205,
-          "totalPoints": 19580.498661382164
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 195,
-          "totalPoints": 33678.61297294064
         }
       ]
     },
@@ -3505,25 +3505,6 @@
       ]
     },
     {
-      "handle": "horlwafemmy",
-      "name": "Bally",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1952305871590948864/dtf-IlIZ_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 210,
-          "totalPoints": 17554.461677963576
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 622,
-          "totalPoints": 1630.5518512284455
-        }
-      ]
-    },
-    {
       "handle": "thanhpq0112",
       "name": "Largo🌊RIVER | .edgeX🦭",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1383078137462804482/m67QXvhE_200x200.jpg",
@@ -3531,14 +3512,33 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 211,
-          "totalPoints": 17388.61881969409
+          "rankTotal": 210,
+          "totalPoints": 17885.436500256776
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 183,
           "totalPoints": 36915.03126636789
+        }
+      ]
+    },
+    {
+      "handle": "horlwafemmy",
+      "name": "Bally",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1952305871590948864/dtf-IlIZ_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 211,
+          "totalPoints": 17554.461677963576
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 622,
+          "totalPoints": 1630.5518512284455
         }
       ]
     },
@@ -3672,7 +3672,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 219,
-          "totalPoints": 16356.598673424061
+          "totalPoints": 16327.683570193336
         },
         {
           "topicSlug": "mindo_ai",
@@ -3805,6 +3805,25 @@
       ]
     },
     {
+      "handle": "AZ1Z1M",
+      "name": "AZ1Z1M",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1949478220748947456/qaDyRgAd_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 228,
+          "totalPoints": 14355.070149613344
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 248,
+          "totalPoints": 18492.18967051193
+        }
+      ]
+    },
+    {
       "handle": "0xLittlejoey",
       "name": "Joeyyy",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1950937025042878465/daGlFmp7_200x200.jpg",
@@ -3812,7 +3831,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 228,
+          "rankTotal": 229,
           "totalPoints": 14306.485680720592
         },
         {
@@ -3820,19 +3839,6 @@
           "period": "tournament",
           "rankTotal": 567,
           "totalPoints": 2301.312338785013
-        }
-      ]
-    },
-    {
-      "handle": "NovaEth07",
-      "name": "Nova.Eth 🦅",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1984399866634637313/iWaQDE95_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 229,
-          "totalPoints": 13972.517429825704
         }
       ]
     },
@@ -3845,13 +3851,45 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 230,
-          "totalPoints": 13913.17585007834
+          "totalPoints": 14088.736428628225
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": 84,
           "totalPoints": 162474.38099822585
+        }
+      ]
+    },
+    {
+      "handle": "Mr_Physix",
+      "name": "Physix",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1950225134138298368/kQ75ou2Y_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 231,
+          "totalPoints": 14024.221920147826
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 412,
+          "totalPoints": 5711.968530300524
+        }
+      ]
+    },
+    {
+      "handle": "NovaEth07",
+      "name": "Nova.Eth 🦅",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1984399866634637313/iWaQDE95_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 232,
+          "totalPoints": 13972.517429825704
         }
       ]
     },
@@ -3863,7 +3901,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 231,
+          "rankTotal": 233,
           "totalPoints": 13895.074345153233
         }
       ]
@@ -3876,27 +3914,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 232,
+          "rankTotal": 234,
           "totalPoints": 13816.592254541201
-        }
-      ]
-    },
-    {
-      "handle": "Mr_Physix",
-      "name": "Physix",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1950225134138298368/kQ75ou2Y_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 233,
-          "totalPoints": 13773.78938585947
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 412,
-          "totalPoints": 5711.968530300524
         }
       ]
     },
@@ -3908,7 +3927,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 234,
+          "rankTotal": 235,
           "totalPoints": 13750.044519619087
         },
         {
@@ -3920,21 +3939,21 @@
       ]
     },
     {
-      "handle": "AZ1Z1M",
-      "name": "AZ1Z1M",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1949478220748947456/qaDyRgAd_200x200.jpg",
+      "handle": "an0x12",
+      "name": "AnRift|🌊RIVER",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1968161203525652480/jPPjylP-_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 235,
-          "totalPoints": 13534.230952926682
+          "rankTotal": 236,
+          "totalPoints": 13583.736717081834
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
-          "rankTotal": 248,
-          "totalPoints": 18492.18967051193
+          "rankTotal": 238,
+          "totalPoints": 20732.227637300643
         }
       ]
     },
@@ -3946,7 +3965,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 236,
+          "rankTotal": 237,
           "totalPoints": 13453.488181201681
         }
       ]
@@ -3959,7 +3978,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 237,
+          "rankTotal": 238,
           "totalPoints": 13416.43831834671
         },
         {
@@ -3967,25 +3986,6 @@
           "period": "tournament",
           "rankTotal": 408,
           "totalPoints": 5882.5695251042125
-        }
-      ]
-    },
-    {
-      "handle": "an0x12",
-      "name": "AnRift|🌊RIVER",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1968161203525652480/jPPjylP-_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 238,
-          "totalPoints": 13288.438092797447
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 238,
-          "totalPoints": 20732.227637300643
         }
       ]
     },
@@ -4003,6 +4003,25 @@
       ]
     },
     {
+      "handle": "Xlaw_fx",
+      "name": "Light 💡π²",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1987267856455577600/XaVqlD01_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 240,
+          "totalPoints": 12952.566278023913
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 166,
+          "totalPoints": 45021.49069749541
+        }
+      ]
+    },
+    {
       "handle": "hizqilsky",
       "name": "Hizqil 🌊RIVER",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1978322845110599680/O6g_UOXS_200x200.jpg",
@@ -4010,27 +4029,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 240,
-          "totalPoints": 12793.537350553168
-        }
-      ]
-    },
-    {
-      "handle": "celipto1",
-      "name": "celipto",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1985283681435660288/FDjXrPHR_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
           "rankTotal": 241,
-          "totalPoints": 12782.472210016289
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 396,
-          "totalPoints": 6723.500527001869
+          "totalPoints": 12793.537350553168
         }
       ]
     },
@@ -4067,21 +4067,21 @@
       ]
     },
     {
-      "handle": "Xlaw_fx",
-      "name": "Light 💡π²",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1987267856455577600/XaVqlD01_200x200.jpg",
+      "handle": "celipto1",
+      "name": "celipto",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1985283681435660288/FDjXrPHR_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 244,
-          "totalPoints": 12560.064269598946
+          "totalPoints": 12478.450985929372
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
-          "rankTotal": 166,
-          "totalPoints": 45021.49069749541
+          "rankTotal": 396,
+          "totalPoints": 6723.500527001869
         }
       ]
     },
@@ -4145,7 +4145,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 248,
-          "totalPoints": 12249.602239916218
+          "totalPoints": 12249.643430116317
         },
         {
           "topicSlug": "mindo_ai",
@@ -4560,6 +4560,25 @@
       ]
     },
     {
+      "handle": "Upac29",
+      "name": "Upac",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1965726931254427648/BTvG2hFn_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 275,
+          "totalPoints": 9357.005024787803
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 386,
+          "totalPoints": 7108.65994439182
+        }
+      ]
+    },
+    {
       "handle": "bihai996",
       "name": "Crypto 币海",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1778852087444688896/DJnHkbQ__200x200.jpg",
@@ -4567,7 +4586,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 275,
+          "rankTotal": 276,
           "totalPoints": 9241.256013127335
         }
       ]
@@ -4580,7 +4599,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 276,
+          "rankTotal": 277,
           "totalPoints": 9237.879969968526
         }
       ]
@@ -4593,7 +4612,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 277,
+          "rankTotal": 278,
           "totalPoints": 9232.722799327377
         },
         {
@@ -4601,25 +4620,6 @@
           "period": "tournament",
           "rankTotal": 336,
           "totalPoints": 10040.627082466815
-        }
-      ]
-    },
-    {
-      "handle": "Upac29",
-      "name": "Upac",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1965726931254427648/BTvG2hFn_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 278,
-          "totalPoints": 9213.051101329529
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 386,
-          "totalPoints": 7108.65994439182
         }
       ]
     },
@@ -4658,7 +4658,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 281,
-          "totalPoints": 8884.53397141393
+          "totalPoints": 8884.599823499255
         },
         {
           "topicSlug": "mindo_ai",
@@ -4825,7 +4825,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 292,
-          "totalPoints": 7889.657842367047
+          "totalPoints": 7889.726556919255
         }
       ]
     },
@@ -4870,7 +4870,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 295,
-          "totalPoints": 7681.634663032325
+          "totalPoints": 7672.316879707272
         }
       ]
     },
@@ -4888,6 +4888,25 @@
       ]
     },
     {
+      "handle": "Yari_kiru",
+      "name": "YariKiru|MemeMax⚡️ & 🌊RIVER & .edge🦭",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1987069814209454087/Lo_BmMse_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 297,
+          "totalPoints": 7103.9416517219015
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 208,
+          "totalPoints": 28360.073876459475
+        }
+      ]
+    },
+    {
       "handle": "Razzshares",
       "name": "Razz Shares",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1966013808125816838/E9QNFis0_200x200.jpg",
@@ -4895,7 +4914,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 297,
+          "rankTotal": 298,
           "totalPoints": 7021.828767858406
         },
         {
@@ -4903,19 +4922,6 @@
           "period": "tournament",
           "rankTotal": 361,
           "totalPoints": 8286.148910698954
-        }
-      ]
-    },
-    {
-      "handle": "hustle_pay_real",
-      "name": "Hustle_Pay🙏",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1964835547886522369/1dVrzRg6_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 298,
-          "totalPoints": 7012.746777628696
         }
       ]
     },
@@ -4939,21 +4945,15 @@
       ]
     },
     {
-      "handle": "Yari_kiru",
-      "name": "YariKiru|MemeMax⚡️ & 🌊RIVER & .edge🦭",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1987069814209454087/Lo_BmMse_200x200.jpg",
+      "handle": "hustle_pay_real",
+      "name": "Hustle_Pay🙏",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1964835547886522369/1dVrzRg6_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 300,
-          "totalPoints": 6946.076281683637
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 208,
-          "totalPoints": 28360.073876459475
+          "totalPoints": 6837.428108187979
         }
       ]
     },
@@ -4979,7 +4979,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 302,
-          "totalPoints": 6615.788316468562
+          "totalPoints": 6615.891311228807
         },
         {
           "topicSlug": "mindo_ai",
@@ -5594,7 +5594,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 341,
-          "totalPoints": 4141.519931157218
+          "totalPoints": 4235.6453841380635
         }
       ]
     },
@@ -5779,6 +5779,25 @@
       ]
     },
     {
+      "handle": "shinymiso",
+      "name": "그리니 ∞ KIN🌊RIVER",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1702155632387010560/4hu7vZjb_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 354,
+          "totalPoints": 3652.8846453692627
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 393,
+          "totalPoints": 6865.591879904593
+        }
+      ]
+    },
+    {
       "handle": "hosam_web3",
       "name": "Hosam🇪🇬",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1982048804292452352/UxsBalTr_200x200.jpg",
@@ -5786,7 +5805,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 354,
+          "rankTotal": 355,
           "totalPoints": 3637.178176193439
         },
         {
@@ -5805,7 +5824,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 355,
+          "rankTotal": 356,
           "totalPoints": 3535.8347564915307
         },
         {
@@ -5824,7 +5843,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 356,
+          "rankTotal": 357,
           "totalPoints": 3479.5539709938685
         }
       ]
@@ -5837,7 +5856,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 357,
+          "rankTotal": 358,
           "totalPoints": 3471.175718981098
         }
       ]
@@ -5850,7 +5869,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 358,
+          "rankTotal": 359,
           "totalPoints": 3436.4656006246214
         },
         {
@@ -5858,25 +5877,6 @@
           "period": "tournament",
           "rankTotal": 260,
           "totalPoints": 17395.65182552552
-        }
-      ]
-    },
-    {
-      "handle": "shinymiso",
-      "name": "그리니 ∞ KIN🌊RIVER",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1702155632387010560/4hu7vZjb_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 359,
-          "totalPoints": 3409.320934158307
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 393,
-          "totalPoints": 6865.591879904593
         }
       ]
     },
@@ -6259,25 +6259,6 @@
       ]
     },
     {
-      "handle": "Alpha_Guru_11",
-      "name": "Alpha Guru",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1958062868215009280/tevlDDci_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 384,
-          "totalPoints": 2810.9676728002255
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 477,
-          "totalPoints": 3866.4983363940164
-        }
-      ]
-    },
-    {
       "handle": "PeeterFi",
       "name": "PeeterFi",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1923462342769025026/VaIFv5ez_200x200.jpg",
@@ -6285,7 +6266,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 385,
+          "rankTotal": 384,
           "totalPoints": 2800.12214739401
         },
         {
@@ -6304,7 +6285,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 386,
+          "rankTotal": 385,
           "totalPoints": 2794.056700671469
         }
       ]
@@ -6317,7 +6298,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 387,
+          "rankTotal": 386,
           "totalPoints": 2769.3091077971267
         },
         {
@@ -6336,7 +6317,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 388,
+          "rankTotal": 387,
           "totalPoints": 2714.6921153948138
         }
       ]
@@ -6349,7 +6330,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 389,
+          "rankTotal": 388,
           "totalPoints": 2708.783910096099
         },
         {
@@ -6368,7 +6349,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 390,
+          "rankTotal": 389,
           "totalPoints": 2693.196804832588
         }
       ]
@@ -6381,7 +6362,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 391,
+          "rankTotal": 390,
           "totalPoints": 2628.539230960988
         },
         {
@@ -6400,7 +6381,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 392,
+          "rankTotal": 391,
           "totalPoints": 2597.5456471576513
         }
       ]
@@ -6413,7 +6394,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 393,
+          "rankTotal": 392,
           "totalPoints": 2564.5707418836264
         },
         {
@@ -6432,7 +6413,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 394,
+          "rankTotal": 393,
           "totalPoints": 2507.466048781458
         }
       ]
@@ -6445,7 +6426,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 395,
+          "rankTotal": 394,
           "totalPoints": 2452.131604642932
         }
       ]
@@ -6458,7 +6439,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 396,
+          "rankTotal": 395,
           "totalPoints": 2394.84351840659
         },
         {
@@ -6477,7 +6458,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 397,
+          "rankTotal": 396,
           "totalPoints": 2328.96706949589
         }
       ]
@@ -6490,7 +6471,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 398,
+          "rankTotal": 397,
           "totalPoints": 2328.046276825013
         },
         {
@@ -6509,7 +6490,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 399,
+          "rankTotal": 398,
           "totalPoints": 2318.8612381282423
         }
       ]
@@ -6522,7 +6503,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 400,
+          "rankTotal": 399,
           "totalPoints": 2287.879393084525
         }
       ]
@@ -6535,7 +6516,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 401,
+          "rankTotal": 400,
           "totalPoints": 2255.2560423927257
         },
         {
@@ -6554,7 +6535,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 402,
+          "rankTotal": 401,
           "totalPoints": 2193.185957721733
         }
       ]
@@ -6567,7 +6548,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 403,
+          "rankTotal": 402,
           "totalPoints": 2142.3051804960483
         },
         {
@@ -6586,7 +6567,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 404,
+          "rankTotal": 403,
           "totalPoints": 2115.2931092724325
         }
       ]
@@ -6599,7 +6580,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 405,
+          "rankTotal": 404,
           "totalPoints": 2077.417704829085
         },
         {
@@ -6618,7 +6599,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 406,
+          "rankTotal": 405,
           "totalPoints": 2044.0028426306499
         },
         {
@@ -6637,7 +6618,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 407,
+          "rankTotal": 406,
           "totalPoints": 2008.5437918802534
         }
       ]
@@ -6650,7 +6631,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 408,
+          "rankTotal": 407,
           "totalPoints": 2007.0234391289791
         }
       ]
@@ -6663,7 +6644,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 409,
+          "rankTotal": 408,
           "totalPoints": 1972.7302158360062
         }
       ]
@@ -6676,7 +6657,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 410,
+          "rankTotal": 409,
           "totalPoints": 1909.0984040781073
         },
         {
@@ -6695,7 +6676,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 411,
+          "rankTotal": 410,
           "totalPoints": 1907.190575537576
         },
         {
@@ -6714,8 +6695,27 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 412,
+          "rankTotal": 411,
           "totalPoints": 1867.5885261382446
+        }
+      ]
+    },
+    {
+      "handle": "Alpha_Guru_11",
+      "name": "Alpha Guru",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1958062868215009280/tevlDDci_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 412,
+          "totalPoints": 1841.6684752829065
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 477,
+          "totalPoints": 3866.4983363940164
         }
       ]
     },
@@ -6797,6 +6797,44 @@
       ]
     },
     {
+      "handle": "p3sS31aNDu11474",
+      "name": "Crypto with.RI (Ø,G)",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1987136357156986885/WibKdLo7_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 418,
+          "totalPoints": 1723.9580730625328
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 504,
+          "totalPoints": 3391.44298505223
+        }
+      ]
+    },
+    {
+      "handle": "khantussar7",
+      "name": "tussar.eth",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1982310408800137216/RBw9Dal4_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 419,
+          "totalPoints": 1689.2302449622675
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 485,
+          "totalPoints": 3759.4177301605623
+        }
+      ]
+    },
+    {
       "handle": "AnzaCreate",
       "name": "Anza",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1979642117937823744/a8LfCpar_200x200.jpg",
@@ -6804,8 +6842,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 418,
-          "totalPoints": 1655.4507688612357
+          "rankTotal": 420,
+          "totalPoints": 1655.7495232456338
         },
         {
           "topicSlug": "mindo_ai",
@@ -6823,27 +6861,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 419,
+          "rankTotal": 421,
           "totalPoints": 1651.564736490642
-        }
-      ]
-    },
-    {
-      "handle": "p3sS31aNDu11474",
-      "name": "Crypto with.RI (Ø,G)",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1987136357156986885/WibKdLo7_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 420,
-          "totalPoints": 1641.8648314881264
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 504,
-          "totalPoints": 3391.44298505223
         }
       ]
     },
@@ -6855,7 +6874,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 421,
+          "rankTotal": 422,
           "totalPoints": 1622.2282105166526
         },
         {
@@ -6874,7 +6893,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 422,
+          "rankTotal": 423,
           "totalPoints": 1617.2040498526815
         },
         {
@@ -6882,25 +6901,6 @@
           "period": "tournament",
           "rankTotal": 413,
           "totalPoints": 5688.180643555196
-        }
-      ]
-    },
-    {
-      "handle": "khantussar7",
-      "name": "tussar.eth",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1982310408800137216/RBw9Dal4_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 423,
-          "totalPoints": 1608.7907094878738
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 485,
-          "totalPoints": 3759.4177301605623
         }
       ]
     },
@@ -7297,6 +7297,25 @@
       ]
     },
     {
+      "handle": "SangNguyenTai",
+      "name": "Nguyen Tai Sang 🇻🇳 🟨",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1728219109350121472/pY4356Dp_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 450,
+          "totalPoints": 1233.5603437832451
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": 658,
+          "totalPoints": 1290.0701889494208
+        }
+      ]
+    },
+    {
       "handle": "Candy_Drops__",
       "name": "Candy Drops",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1894596682689503232/JjYE0HZb_200x200.png",
@@ -7304,7 +7323,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 450,
+          "rankTotal": 451,
           "totalPoints": 1228.3152769810536
         }
       ]
@@ -7317,7 +7336,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 451,
+          "rankTotal": 452,
           "totalPoints": 1222.1656366984676
         }
       ]
@@ -7330,8 +7349,21 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 452,
+          "rankTotal": 453,
           "totalPoints": 1205.4074994823238
+        }
+      ]
+    },
+    {
+      "handle": "Defimusk0",
+      "name": "defimusk (Ø,G)",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1925336478428561408/lFnicHyO_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": 454,
+          "totalPoints": 1196.8482948553935
         }
       ]
     },
@@ -7343,7 +7375,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 453,
+          "rankTotal": 455,
           "totalPoints": 1177.4522323462702
         }
       ]
@@ -7356,7 +7388,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 454,
+          "rankTotal": 456,
           "totalPoints": 1176.6498769617617
         },
         {
@@ -7375,7 +7407,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 455,
+          "rankTotal": 457,
           "totalPoints": 1169.7186799721364
         },
         {
@@ -7394,7 +7426,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 456,
+          "rankTotal": 458,
           "totalPoints": 1169.4008602437566
         }
       ]
@@ -7407,7 +7439,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 457,
+          "rankTotal": 459,
           "totalPoints": 1165.3957186476189
         }
       ]
@@ -7420,7 +7452,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 458,
+          "rankTotal": 460,
           "totalPoints": 1136.6832962257645
         }
       ]
@@ -7433,7 +7465,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 459,
+          "rankTotal": 461,
           "totalPoints": 1132.228982579504
         }
       ]
@@ -7446,7 +7478,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 460,
+          "rankTotal": 462,
           "totalPoints": 1113.3552458213214
         }
       ]
@@ -7459,7 +7491,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 461,
+          "rankTotal": 463,
           "totalPoints": 1112.990399761047
         },
         {
@@ -7478,7 +7510,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 462,
+          "rankTotal": 464,
           "totalPoints": 1107.269637023858
         },
         {
@@ -7490,19 +7522,6 @@
       ]
     },
     {
-      "handle": "Defimusk0",
-      "name": "defimusk (Ø,G)",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1925336478428561408/lFnicHyO_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": 463,
-          "totalPoints": 1101.100431266962
-        }
-      ]
-    },
-    {
       "handle": "zahrakhani1372",
       "name": "Power Year. This time I am not me anymore.",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1973358359785984000/Dqo6FAKz_200x200.jpg",
@@ -7510,7 +7529,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 464,
+          "rankTotal": 465,
           "totalPoints": 1082.1148871368166
         }
       ]
@@ -7523,8 +7542,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 465,
-          "totalPoints": 1063.9828107511514
+          "rankTotal": 466,
+          "totalPoints": 1064.5729812139325
         }
       ]
     },
@@ -7536,7 +7555,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 466,
+          "rankTotal": 467,
           "totalPoints": 1044.4596324067134
         }
       ]
@@ -7549,8 +7568,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 467,
-          "totalPoints": 1025.98350054877
+          "rankTotal": 468,
+          "totalPoints": 1026.0759040173461
         }
       ]
     },
@@ -7562,7 +7581,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 468,
+          "rankTotal": 469,
           "totalPoints": 1000.2436557014876
         }
       ]
@@ -7575,7 +7594,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 469,
+          "rankTotal": 470,
           "totalPoints": 974.5991250564454
         },
         {
@@ -7594,7 +7613,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 470,
+          "rankTotal": 471,
           "totalPoints": 970.1428528059948
         },
         {
@@ -7613,7 +7632,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 471,
+          "rankTotal": 472,
           "totalPoints": 961.5405523969771
         }
       ]
@@ -7626,7 +7645,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 472,
+          "rankTotal": 473,
           "totalPoints": 952.3886637508785
         },
         {
@@ -7645,7 +7664,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 473,
+          "rankTotal": 474,
           "totalPoints": 950.5027040778583
         }
       ]
@@ -7658,7 +7677,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 474,
+          "rankTotal": 475,
           "totalPoints": 946.114044163029
         },
         {
@@ -7677,7 +7696,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 475,
+          "rankTotal": 476,
           "totalPoints": 940.6784284361329
         },
         {
@@ -7696,7 +7715,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 476,
+          "rankTotal": 477,
           "totalPoints": 927.7640263646006
         }
       ]
@@ -7709,7 +7728,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 477,
+          "rankTotal": 478,
           "totalPoints": 822.1695733259921
         },
         {
@@ -7728,7 +7747,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 478,
+          "rankTotal": 479,
           "totalPoints": 786.3231219613135
         }
       ]
@@ -7741,7 +7760,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 479,
+          "rankTotal": 480,
           "totalPoints": 781.3351124592051
         }
       ]
@@ -7754,7 +7773,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 480,
+          "rankTotal": 481,
           "totalPoints": 780.1973512815391
         }
       ]
@@ -7767,7 +7786,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 481,
+          "rankTotal": 482,
           "totalPoints": 743.1676689365854
         }
       ]
@@ -7780,7 +7799,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 482,
+          "rankTotal": 483,
           "totalPoints": 741.8937075370031
         },
         {
@@ -7799,7 +7818,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 483,
+          "rankTotal": 484,
           "totalPoints": 732.8002172804802
         }
       ]
@@ -7812,7 +7831,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 484,
+          "rankTotal": 485,
           "totalPoints": 725.2437515035341
         },
         {
@@ -7831,7 +7850,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 485,
+          "rankTotal": 486,
           "totalPoints": 721.2838622546425
         }
       ]
@@ -7844,7 +7863,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 486,
+          "rankTotal": 487,
           "totalPoints": 700.5570772522801
         },
         {
@@ -7863,7 +7882,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 487,
+          "rankTotal": 488,
           "totalPoints": 689.9754828363772
         },
         {
@@ -7882,7 +7901,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 488,
+          "rankTotal": 489,
           "totalPoints": 685.3967521860541
         },
         {
@@ -7901,7 +7920,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 489,
+          "rankTotal": 490,
           "totalPoints": 676.8062389852075
         }
       ]
@@ -7914,7 +7933,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 490,
+          "rankTotal": 491,
           "totalPoints": 663.896002415691
         }
       ]
@@ -7927,7 +7946,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 491,
+          "rankTotal": 492,
           "totalPoints": 661.1103163242442
         },
         {
@@ -7946,7 +7965,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 492,
+          "rankTotal": 493,
           "totalPoints": 645.0117900790818
         }
       ]
@@ -7959,7 +7978,7 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 493,
+          "rankTotal": 494,
           "totalPoints": 621.4164526743888
         },
         {
@@ -7978,27 +7997,8 @@
         {
           "topicSlug": "tria",
           "period": "tournament",
-          "rankTotal": 494,
-          "totalPoints": 619.3105117991752
-        }
-      ]
-    },
-    {
-      "handle": "SangNguyenTai",
-      "name": "Nguyen Tai Sang 🇻🇳 🟨",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1728219109350121472/pY4356Dp_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
           "rankTotal": 495,
-          "totalPoints": 616.7801718916226
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": 658,
-          "totalPoints": 1290.0701889494208
+          "totalPoints": 619.3105117991752
         }
       ]
     },
@@ -8024,7 +8024,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 497,
-          "totalPoints": 601.9688940142306
+          "totalPoints": 602.1319271635997
         },
         {
           "topicSlug": "mindo_ai",
@@ -8043,7 +8043,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 498,
-          "totalPoints": 595.8501786761525
+          "totalPoints": 595.8811031228781
         },
         {
           "topicSlug": "mindo_ai",
@@ -8132,7 +8132,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 503,
-          "totalPoints": 577.8845761044776
+          "totalPoints": 577.890932150919
         },
         {
           "topicSlug": "mindo_ai",
@@ -8285,7 +8285,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 512,
-          "totalPoints": 456.7216688762842
+          "totalPoints": 456.74690025865357
         },
         {
           "topicSlug": "mindo_ai",
@@ -8778,7 +8778,7 @@
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": 543,
-          "totalPoints": 51.065995078470465
+          "totalPoints": 51.145879402192946
         }
       ]
     },
@@ -8867,15 +8867,15 @@
       ]
     },
     {
-      "handle": "SantoXBT",
-      "name": "Santolita",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1702947770208837632/CKNO5YXu_200x200.jpg",
+      "handle": "gringokiwi",
+      "name": "James Scaur ◉⚡️🥝",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1894210961650663424/f7Zf9Syx_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 849.7540001354162
+          "totalPoints": 21.48137083107216
         }
       ]
     },
@@ -8899,66 +8899,34 @@
       ]
     },
     {
-      "handle": "gringokiwi",
-      "name": "James Scaur ◉⚡️🥝",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1894210961650663424/f7Zf9Syx_200x200.jpg",
+      "handle": "_BigTudor",
+      "name": "Tudor🔶Krypt™️",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1863671545954017280/zqLLtx3X_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 21.48137083107216
-        }
-      ]
-    },
-    {
-      "handle": "colu_farmer",
-      "name": "코루",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1928110886486433792/xAkGY6r2_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 1045.6968760127581
-        }
-      ]
-    },
-    {
-      "handle": "0x_Kalista",
-      "name": "0x_Kalista ⟠",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1843575882197413889/RQ5H8IwK_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 171.3085541036521
+          "totalPoints": 443.6628789585505
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 585.0364209326127
+          "totalPoints": 80.05737164854801
         }
       ]
     },
     {
-      "handle": "OnlyHades_",
-      "name": "0xHades",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1911040817159864320/BqhG7Ktt_200x200.jpg",
+      "handle": "biren888",
+      "name": "⚡️biren888.eth⚡️",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1749684374340280320/mfwfRqQX_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 770.3335561805186
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 746.8538390246189
+          "totalPoints": 574.842922771727
         }
       ]
     },
@@ -8976,86 +8944,47 @@
       ]
     },
     {
-      "handle": "CryptoEights",
-      "name": "CryptoEights",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1964941237066383360/3u1EYeQu_200x200.jpg",
+      "handle": "zhangdm8",
+      "name": "🌸🟥🟧🟨🟪⬜️张大猫🩵 1111BG狂欢",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1885562149046775810/3bGjeN_B_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 482.9857672869523
+          "totalPoints": 65.11657066142733
         }
       ]
     },
     {
-      "handle": "LillyCreator",
-      "name": "Lilly 🎮",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1957892509582925824/Wztibxww_200x200.jpg",
+      "handle": "useTria",
+      "name": "Tria",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1947271337057079296/_smOX_4e_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 595.3980383658723
-        }
-      ]
-    },
-    {
-      "handle": "cangg_l",
-      "name": "Canglong ✨",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1981774817259851776/GT9qwzC4_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 308.5943865806002
-        }
-      ]
-    },
-    {
-      "handle": "ZygfridS",
-      "name": "Zygfrid🌎",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1930266006930485248/R4FKQ6Ro_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 694.6347350458663
-        }
-      ]
-    },
-    {
-      "handle": "BlueTigerX_",
-      "name": "BlueTiger",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1895503790544949248/LZC-XWFT_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 1173.617579554583
-        }
-      ]
-    },
-    {
-      "handle": "guiguziben",
-      "name": "鬼谷研选GhostClub（唯一商务 @guiguziben)",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1945836429378043904/7ktvHWFs_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 1874.6915598536752
+          "totalPoints": 525.6507384293526
         },
         {
           "topicSlug": "mindo_ai",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 1005.393943173087
+          "totalPoints": 1006.1673116324918
+        }
+      ]
+    },
+    {
+      "handle": "Discobax",
+      "name": "Discoba 🧩 $BARD",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1944407885502353408/YBlT8Tgm_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 113.38727112330123
         }
       ]
     },
@@ -9079,34 +9008,28 @@
       ]
     },
     {
-      "handle": "Discobax",
-      "name": "Discoba 🧩 $BARD",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1944407885502353408/YBlT8Tgm_200x200.jpg",
+      "handle": "sophy_cherie",
+      "name": "Sophy",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1815191952532623360/YQtBtfLx_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 113.38727112330123
+          "totalPoints": 28.776875844436773
         }
       ]
     },
     {
-      "handle": "MindoAI",
-      "name": "Mindō AI",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1957881940905979907/8PQntyUv_200x200.jpg",
+      "handle": "ZygfridS",
+      "name": "Zygfrid🌎",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1930266006930485248/R4FKQ6Ro_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 174341.42674675962
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 771475.894260852
+          "totalPoints": 694.6347350458663
         }
       ]
     },
@@ -9124,15 +9047,34 @@
       ]
     },
     {
-      "handle": "zhangdm8",
-      "name": "🌸🟥🟧🟨🟪⬜️张大猫🩵 1111BG狂欢",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1885562149046775810/3bGjeN_B_200x200.jpg",
+      "handle": "0x_Kalista",
+      "name": "0x_Kalista ⟠",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1843575882197413889/RQ5H8IwK_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 65.11657066142733
+          "totalPoints": 171.3085541036521
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 585.0364209326127
+        }
+      ]
+    },
+    {
+      "handle": "CryptoEights",
+      "name": "CryptoEights",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1964941237066383360/3u1EYeQu_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 482.9857672869523
         }
       ]
     },
@@ -9156,6 +9098,32 @@
       ]
     },
     {
+      "handle": "cangg_l",
+      "name": "Canglong ✨",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1981774817259851776/GT9qwzC4_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 308.5943865806002
+        }
+      ]
+    },
+    {
+      "handle": "LillyCreator",
+      "name": "Lilly 🎮",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1957892509582925824/Wztibxww_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 595.3980383658723
+        }
+      ]
+    },
+    {
       "handle": "rosetina_degen",
       "name": "Rosetina Degen 🎩🎒",
       "avatarUrl": "https://pbs.twimg.com/profile_images/1832063779741569024/EEOPS4GA_200x200.jpg",
@@ -9175,53 +9143,15 @@
       ]
     },
     {
-      "handle": "biren888",
-      "name": "⚡️biren888.eth⚡️",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1749684374340280320/mfwfRqQX_200x200.jpg",
+      "handle": "BlueTigerX_",
+      "name": "BlueTiger",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1895503790544949248/LZC-XWFT_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 574.842922771727
-        }
-      ]
-    },
-    {
-      "handle": "_BigTudor",
-      "name": "Tudor🔶Krypt™️",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1863671545954017280/zqLLtx3X_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 443.6628789585505
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 80.05737164854801
-        }
-      ]
-    },
-    {
-      "handle": "useTria",
-      "name": "Tria",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1947271337057079296/_smOX_4e_200x200.jpg",
-      "topics": [
-        {
-          "topicSlug": "tria",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 522.7289369058649
-        },
-        {
-          "topicSlug": "mindo_ai",
-          "period": "tournament",
-          "rankTotal": null,
-          "totalPoints": 1006.1673116324918
+          "totalPoints": 1173.617579554583
         }
       ]
     },
@@ -9239,15 +9169,85 @@
       ]
     },
     {
-      "handle": "sophy_cherie",
-      "name": "Sophy",
-      "avatarUrl": "https://pbs.twimg.com/profile_images/1815191952532623360/YQtBtfLx_200x200.jpg",
+      "handle": "OnlyHades_",
+      "name": "0xHades",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1911040817159864320/BqhG7Ktt_200x200.jpg",
       "topics": [
         {
           "topicSlug": "tria",
           "period": "tournament",
           "rankTotal": null,
-          "totalPoints": 28.776875844436773
+          "totalPoints": 770.3335561805186
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 746.8538390246189
+        }
+      ]
+    },
+    {
+      "handle": "MindoAI",
+      "name": "Mindō AI",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1957881940905979907/8PQntyUv_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 174533.32174013206
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 771475.894260852
+        }
+      ]
+    },
+    {
+      "handle": "SantoXBT",
+      "name": "Santolita",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1702947770208837632/CKNO5YXu_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 849.7540001354162
+        }
+      ]
+    },
+    {
+      "handle": "guiguziben",
+      "name": "鬼谷研选GhostClub（唯一商务 @guiguziben)",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1945836429378043904/7ktvHWFs_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 1874.733804122851
+        },
+        {
+          "topicSlug": "mindo_ai",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 1005.393943173087
+        }
+      ]
+    },
+    {
+      "handle": "colu_farmer",
+      "name": "코루",
+      "avatarUrl": "https://pbs.twimg.com/profile_images/1928110886486433792/xAkGY6r2_200x200.jpg",
+      "topics": [
+        {
+          "topicSlug": "tria",
+          "period": "tournament",
+          "rankTotal": null,
+          "totalPoints": 1045.6968760127581
         }
       ]
     },
