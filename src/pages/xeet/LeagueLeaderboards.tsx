@@ -1,4 +1,5 @@
-﻿import type { JSX } from "react";
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { JSX } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
 import InfoModal from "../../components/xeet/InfoModal";
@@ -55,7 +56,7 @@ export default function LeagueLeaderboards(): JSX.Element {
     const dropdownRef = useRef<HTMLDivElement | null>(null);
     const [topicCountFilter, setTopicCountFilter] = useState<number | null>(null);
     const [currentPage, setCurrentPage] = useState(1);
-    
+
     // New Noise Ratio Filter State
     const [noiseFilterMode, setNoiseFilterMode] = useState<"all" | "gt" | "lt">("all");
     const [noiseThreshold, setNoiseThreshold] = useState<number>(0);
@@ -129,16 +130,16 @@ export default function LeagueLeaderboards(): JSX.Element {
     const derivedProfiles = useMemo(() => {
         // map each global profile to a simplified object with ranks per topic for the selected dataset
         const profiles = globalProfiles.map((p) => {
-            const ranks: Record<string, { 
-                rankSignal?: number; 
-                rankNoise?: number; 
-                rankTotal?: number; 
-                signalPoints?: number; 
-                noisePoints?: number; 
-                totalPoints?: number; 
+            const ranks: Record<string, {
+                rankSignal?: number;
+                rankNoise?: number;
+                rankTotal?: number;
+                signalPoints?: number;
+                noisePoints?: number;
+                totalPoints?: number;
                 noiseRatio?: number; // Added
             }> = {};
-            
+
             for (const t of p.topics) {
                 if (t.period !== dataset) continue;
                 ranks[t.topicSlug] = {
@@ -236,10 +237,10 @@ export default function LeagueLeaderboards(): JSX.Element {
 
                     // Determine Ratio to use (prefer JSON field, fallback to calc)
                     // The JSON noiseRatio is 0-1. We display percent.
-                    const rawNoiseRatio = r.noiseRatio !== undefined 
-                        ? r.noiseRatio 
+                    const rawNoiseRatio = r.noiseRatio !== undefined
+                        ? r.noiseRatio
                         : (r.signalPoints && r.noisePoints ? (r.noisePoints / (r.signalPoints + r.noisePoints)) : 0);
-                    
+
                     const ratioPercent = rawNoiseRatio * 100;
 
                     // Logic for Noise Filter
@@ -519,11 +520,11 @@ export default function LeagueLeaderboards(): JSX.Element {
                     <div className="text-white text-2xl font-bold">{profileCoverageRatio.toFixed(2)}%</div>
                 </div>
             </div>
-            
+
             {/* Controls Container */}
             <div className="flex flex-col md:flex-row flex-wrap items-start md:items-center justify-between gap-3 bg-white dark:bg-gray-900/50 p-4 rounded-xl border border-gray-200 dark:border-gray-800 shadow-sm">
                 <div className="flex flex-wrap items-center gap-3 w-full">
-                    
+
                     {/* Dataset & Metric */}
                     <div className="flex gap-2">
                         <select value={dataset} onChange={(e) => { setDataset(e.target.value as any); setCurrentPage(1); }} className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
@@ -585,22 +586,22 @@ export default function LeagueLeaderboards(): JSX.Element {
                     {/* Noise Ratio Filter (New Feature) */}
                     <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
                         <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Noise Ratio %</span>
-                        
+
                         {/* Toggle Buttons */}
                         <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
-                            <button 
-                                onClick={() => { setNoiseFilterMode("all"); setCurrentPage(1); }} 
+                            <button
+                                onClick={() => { setNoiseFilterMode("all"); setCurrentPage(1); }}
                                 className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${noiseFilterMode === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
                             >
                                 All
                             </button>
-                            <button 
+                            <button
                                 onClick={() => { setNoiseFilterMode("gt"); setCurrentPage(1); }}
                                 className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${noiseFilterMode === "gt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
                             >
                                 &gt;
                             </button>
-                            <button 
+                            <button
                                 onClick={() => { setNoiseFilterMode("lt"); setCurrentPage(1); }}
                                 className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${noiseFilterMode === "lt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
                             >
@@ -611,22 +612,42 @@ export default function LeagueLeaderboards(): JSX.Element {
                         {/* Slider (Only if not All) */}
                         {noiseFilterMode !== "all" && (
                             <div className="flex items-center gap-2 ml-1">
-                                <input 
-                                    type="range" 
-                                    min="0" 
-                                    max="100" 
+                                <input
+                                    type="range"
+                                    min="0"
+                                    max="100"
                                     step="1"
-                                    value={noiseThreshold} 
-                                    onChange={(e) => { setNoiseThreshold(Number(e.target.value)); setCurrentPage(1); }}
+                                    value={noiseThreshold}
+                                    onChange={(e) => {
+                                        setNoiseThreshold(Number(e.target.value));
+                                        setCurrentPage(1);
+                                    }}
                                     className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
                                 />
-                                <span className="w-8 text-right font-mono text-xs text-blue-600 dark:text-blue-400">{noiseThreshold}%</span>
+
+                                {/* Editable number input (no arrows) */}
+                                <input
+                                    type="text"
+                                    value={noiseThreshold}
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(/[^0-9]/g, ""); // numeric only
+                                        if (val === "") {
+                                            setNoiseThreshold(0);
+                                            return;
+                                        }
+                                        const num = Math.min(100, Math.max(0, Number(val)));
+                                        setNoiseThreshold(num);
+                                        setCurrentPage(1);
+                                    }}
+                                    className="w-10 text-right font-mono text-xs text-blue-600 dark:text-blue-400 bg-transparent border border-gray-300 dark:border-gray-600 rounded px-1 focus:outline-none focus:ring-1 focus:ring-blue-400 no-spinner"
+                                />
+                                <span className="text-xs font-mono text-blue-600 dark:text-blue-400">%</span>
                             </div>
                         )}
                     </div>
 
                     <div className="flex-grow"></div>
-                    
+
                     <div className="flex items-center gap-2 w-full md:w-auto">
                         <input value={profileSearch} onChange={(e) => { setProfileSearch(e.target.value); setCurrentPage(1); }} placeholder="Search profiles..." className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 w-full md:w-64 text-sm" />
                         <InfoModal />
@@ -664,7 +685,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                             getTopicMeta={getTopicMeta}
                             dataset={dataset}
                             metric={metric}
-                            noiseFilterMode={noiseFilterMode} 
+                            noiseFilterMode={noiseFilterMode}
                         />
                     ))}
                 </div>

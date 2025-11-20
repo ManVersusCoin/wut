@@ -1,4 +1,5 @@
-﻿import type { JSX } from "react";
+﻿/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { JSX } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
 
@@ -37,14 +38,19 @@ type GlobalProfile = {
 // Local type mirroring the structure expected by RankingProfileCard
 type ProfileForCard = {
     userId?: string;
-    handle?: string; // Must be optional now
+    handle?: string;
     avatarUrl?: string | null;
     name?: string;
+    ranks: Record<string, any>;
     ranksFiltered: Record<string, any>;
+    __score?: number;
+    __xScore: number; // Valeur brute (totalPoints)
 };
 
-
 const TOP_OPTIONS = [50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000];
+
+// Type pour le mode de filtre du score X
+type XScoreFilterMode = "all" | "gt" | "lt"; // 'gt' pour >, 'lt' pour <
 
 export default function LeagueLeaderboard(): JSX.Element {
     const [globalProfiles, setGlobalProfiles] = useState<GlobalProfile[]>([]);
@@ -52,7 +58,7 @@ export default function LeagueLeaderboard(): JSX.Element {
     const [loading, setLoading] = useState(true);
 
     const [dataset, setDataset] = useState<"tournament" | "7d" | "30d">("tournament");
-    const [topLimit, setTopLimit] = useState<number>(1000);
+    const [topLimit, setTopLimit] = useState<number>(500);
     const [profileSearch, setProfileSearch] = useState("");
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
@@ -64,6 +70,14 @@ export default function LeagueLeaderboard(): JSX.Element {
     const viewMode = "cards";
     const [topicCountFilter, setTopicCountFilter] = useState<number | null>(null);
     const [generationDate, setGenerationDate] = useState<Date | null>(null);
+
+    // NOUVEAUX ÉTATS POUR LE FILTRE X Score
+    const [xScoreFilterMode, setXScoreFilterMode] = useState<XScoreFilterMode>("all");
+    const [xScoreThreshold, setXScoreThreshold] = useState<number>(80); // Le seuil de filtrage (valeur brute)
+    const [minScore, setMinScore] = useState<number>(0); // Min score trouvé dans les données
+    const [maxScore, setMaxScore] = useState<number>(1000); // Max score trouvé dans les données
+    // Fin Nouveaux États
+
     // Load Wallchain data
     useEffect(() => {
         const load = async () => {
@@ -78,7 +92,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                 const gjson = await gRes.json();
                 const profiles: GlobalProfile[] = Array.isArray(gjson.profiles) ? gjson.profiles : [];
                 setGlobalProfiles(profiles);
-                setGenerationDate(gjson.generationDate || null);
+                setGenerationDate(gjson.generationDate ? new Date(gjson.generationDate) : null);
                 if (tRes && tRes.ok) {
                     const tjson = await tRes.json();
                     const metas: TopicMeta[] = (Array.isArray(tjson) ? tjson : []).map((t: any) => ({
@@ -97,7 +111,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                 } else {
                     // fallback if topic file missing
                     const uniq = new Map<string, TopicMeta>();
-                    gjson.forEach((p: GlobalProfile) => {
+                    (gjson.profiles || []).forEach((p: GlobalProfile) => {
                         p.topics.forEach((te: TopicEntry) => {
                             if (!uniq.has(te.topicSlug)) {
                                 uniq.set(te.topicSlug, { topicSlug: te.topicSlug, title: te.topicSlug });
@@ -125,23 +139,67 @@ export default function LeagueLeaderboard(): JSX.Element {
         return () => document.removeEventListener("mousedown", onDocClick);
     }, []);
 
-    const derivedProfiles = useMemo(() => {
+    // Calcul et mise à jour des scores min/max et du seuil initial
+    useEffect(() => {
+        let currentMin = Infinity;
+        let currentMax = -Infinity;
+
+        for (const p of globalProfiles) {
+            for (const t of p.topics) {
+                if (typeof t.totalPoints === "number") {
+                    currentMin = Math.min(currentMin, t.totalPoints);
+                    currentMax = Math.max(currentMax, t.totalPoints);
+                    // totalPoints est constant pour le profil, on peut break
+                    break;
+                }
+            }
+        }
+
+        // Arrondir les scores min et max pour le curseur
+        const finalMin = currentMin === Infinity ? 0 : Math.floor(currentMin);
+        const finalMax = currentMax === -Infinity ? 100 : Math.ceil(currentMax);
+
+        // Mettre à jour les états min/max
+        if (finalMin !== minScore) setMinScore(finalMin);
+        if (finalMax !== maxScore) setMaxScore(finalMax);
+
+        // Initialiser le seuil au max la première fois que les données sont chargées
+        if (globalProfiles.length > 0 && xScoreThreshold === 0) {
+            setXScoreThreshold(finalMax);
+        }
+
+    }, [globalProfiles, minScore, maxScore, xScoreThreshold]);
+
+
+    // Calcul des profiles dérivés (seulement le __xScore non normalisé)
+    const derivedProfiles: ProfileForCard[] = useMemo(() => {
         return globalProfiles.map((p) => {
             const ranks: Record<string, { rankTotal?: number; totalPoints?: number }> = {};
+            let profileTotalPoints = 0;
+
             for (const t of p.topics) {
-                if (t.period !== dataset) continue;
-                ranks[t.topicSlug] = {
-                    rankTotal: t.rankTotal,
-                    totalPoints: t.totalPoints,
-                };
+                if (t.period === dataset) {
+                    ranks[t.topicSlug] = {
+                        rankTotal: t.rankTotal,
+                        totalPoints: t.totalPoints,
+                    };
+                }
+                // Récupérer le totalPoints du profil pour __xScore
+                if (typeof t.totalPoints === "number" && profileTotalPoints === 0) {
+                    profileTotalPoints = t.totalPoints;
+                }
             }
+
             return {
                 userId: p.handle,
                 handle: p.handle,
                 name: p.name,
                 avatarUrl: p.avatarUrl,
-                ranks,
-            };
+                ranks: ranks,
+                ranksFiltered: {},
+                __score: 0,
+                __xScore: profileTotalPoints, // Valeur brute
+            } as ProfileForCard;
         });
     }, [globalProfiles, dataset]);
 
@@ -165,42 +223,55 @@ export default function LeagueLeaderboard(): JSX.Element {
         );
     }, [topicsForDataset, topicQuery]);
 
-    const filteredProfiles = useMemo(() => {
 
-        let arr: (ProfileForCard & { __score?: number })[] = derivedProfiles.map((p) => {
+    const filteredProfiles: ProfileForCard[] = useMemo(() => {
+        let arr: ProfileForCard[] = derivedProfiles.map((p) => {
             const ranksFiltered: Record<string, any> = {};
             for (const [slug, r] of Object.entries(p.ranks)) {
                 // Étape 1 : Applique la limite 'topLimit'
-                if (typeof r.rankTotal === "number" && r.rankTotal <= topLimit) {
+                if (r && typeof r.rankTotal === "number" && r.rankTotal <= topLimit) {
                     ranksFiltered[slug] = { ...r };
                 }
             }
-            return { ...p, ranksFiltered } as ProfileForCard;
+            return { ...p, ranksFiltered };
         });
 
-        // NOUVELLE LOGIQUE CRITIQUE : Filtrer les ranks internes par les topics sélectionnés
+        // FILTRAGE LOGIQUE
+
+        // 1. Filtrer par topics sélectionnés (si spécifié)
         if (selectedTopics.length > 0) {
             arr = arr.map(p => {
                 const newRanksFiltered: Record<string, any> = {};
                 for (const slug of selectedTopics) {
-                    // Conserve le rank uniquement s'il a passé le filtre topLimit (via p.ranksFiltered)
-                    // ET s'il fait partie des topics sélectionnés
                     if (p.ranksFiltered[slug]) {
                         newRanksFiltered[slug] = p.ranksFiltered[slug];
                     }
                 }
-                // Le profil est mis à jour avec UNIQUEMENT les ranks des topics sélectionnés
                 return {
                     ...p,
                     ranksFiltered: newRanksFiltered,
                 };
             });
-
-            // L'ancienne étape de filtrage des PROFILES est implicitement gérée par le filtre final ci-dessous.
-            // On s'assure ainsi que seuls les ranks sélectionnés affectent les métriques.
         }
 
 
+        // 2. FILTRE X SCORE (utilise la valeur brute)
+        if (xScoreFilterMode !== "all") {
+            const threshold = xScoreThreshold;
+            arr = arr.filter((p) => {
+                if (xScoreFilterMode === "gt") {
+                    return p.__xScore >= threshold;
+                }
+                if (xScoreFilterMode === "lt") {
+                    return p.__xScore <= threshold;
+                }
+                return true;
+            });
+        }
+        // FIN FILTRE X SCORE
+
+
+        // 3. Filtrer par recherche de profil
         if (profileSearch.trim()) {
             const q = profileSearch.toLowerCase();
             arr = arr.filter(
@@ -208,13 +279,12 @@ export default function LeagueLeaderboard(): JSX.Element {
             );
         }
 
-       
-
+        // 4. Filtrer par nombre de topics
         if (topicCountFilter) {
             arr = arr.filter((p) => Object.keys(p.ranksFiltered).length === topicCountFilter);
         }
 
-
+        // 5. Calculer le score et trier
         if (!selectedTopics.length) {
 
             arr = arr
@@ -226,8 +296,8 @@ export default function LeagueLeaderboard(): JSX.Element {
                         .reduce((a, b) => a + b, 0);
                     return { ...p, __score: points };
                 })
-                .sort((a: any, b: any) => {
-                    if (b.__score !== a.__score) return b.__score - a.__score;
+                .sort((a, b) => {
+                    if ((b.__score ?? 0) !== (a.__score ?? 0)) return (b.__score ?? 0) - (a.__score ?? 0);
                     return (a.name || a.handle || "").localeCompare(b.name || b.handle || "", undefined, {
                         sensitivity: "base",
                     });
@@ -252,10 +322,10 @@ export default function LeagueLeaderboard(): JSX.Element {
         }
 
 
-        // Filtre final : retire les profils qui n'ont plus d'entrées de classement
-        // (parce qu'elles ont été filtrées par selectedTopics ou topLimit).
-        return arr.filter((p) => Object.keys(p.ranksFiltered).length > 0);
-    }, [derivedProfiles, selectedTopics, profileSearch, topLimit, sortConfig, topicCountFilter]);
+        // 6. Filtre final : retire les profils qui n'ont plus d'entrées de classement
+        return arr.filter((p) => Object.keys(p.ranksFiltered).length > 0) as ProfileForCard[];
+    }, [derivedProfiles, selectedTopics, profileSearch, topLimit, sortConfig, topicCountFilter, xScoreFilterMode, xScoreThreshold]);
+
 
     const topicCountOptions = useMemo(() => {
         const counts: Record<number, number> = {};
@@ -296,7 +366,6 @@ export default function LeagueLeaderboard(): JSX.Element {
     const start = (currentPage - 1) * itemsPerPage;
     const pageProfiles = filteredProfiles.slice(start, start + itemsPerPage);
 
-    // FIX: Function signature changed to match RankingProfileCardProps: returns TopicMeta | undefined
     const getTopicMeta = (slug: string): TopicMeta | undefined =>
         topicMetas.find((t) => t.topicSlug === slug);
 
@@ -347,15 +416,15 @@ export default function LeagueLeaderboard(): JSX.Element {
                 </div>
                 <div className="bg-green-500 dark:bg-green-800 rounded-xl p-4 shadow-md">
                     <div className="text-white text-sm font-medium">Active Topics</div>
-                    <div className="text-white text-2xl font-bold">{activeTopicsCount}</div> {/* MODIF HERE */}
+                    <div className="text-white text-2xl font-bold">{activeTopicsCount}</div>
                 </div>
                 <div className="bg-purple-500 dark:bg-purple-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
                     <div className="text-white text-sm font-medium">Leaderboard Entries</div>
-                    <div className="text-white text-2xl font-bold">{visibleLeaderboardEntriesCount}</div> {/* MODIF HERE */}
+                    <div className="text-white text-2xl font-bold">{visibleLeaderboardEntriesCount}</div>
                 </div>
 
                 <div className="bg-red-500 dark:bg-red-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
-                    <div className="text-white text-sm font-medium">Profile Uniqueness Ratio</div>
+                    <div className="text-white text-sm font-medium">Profile Coverage Ratio</div>
                     <div className="text-white text-2xl font-bold">{profileCoverageRatio.toFixed(2)}%</div>
                 </div>
             </div>
@@ -388,7 +457,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                         ))}
                     </select>
 
-                    {/* Topics dropdown - MODIF HERE */}
+                    {/* Topics dropdown */}
                     <div className="relative" ref={dropdownRef}>
                         <button
                             onClick={() => setTopicDropdownOpen((o) => !o)}
@@ -480,6 +549,68 @@ export default function LeagueLeaderboard(): JSX.Element {
                         )}
                     </div>
 
+                    {/* NOUVEAU BLOC DE FILTRE X SCORE */}
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                        <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">X Score</span>
+
+                        {/* Toggle Buttons */}
+                        <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
+                            <button
+                                onClick={() => { setXScoreFilterMode("all"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${xScoreFilterMode === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                All
+                            </button>
+                            <button
+                                onClick={() => { setXScoreFilterMode("gt"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${xScoreFilterMode === "gt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                &gt;
+                            </button>
+                            <button
+                                onClick={() => { setXScoreFilterMode("lt"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${xScoreFilterMode === "lt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                &lt;
+                            </button>
+                        </div>
+
+                        {/* Slider (Only if not All) */}
+                        {xScoreFilterMode !== "all" && (
+                            <div className="flex items-center gap-2 ml-1">
+                                <input
+                                    type="range"
+                                    min={minScore}
+                                    max={maxScore}
+                                    step="1"
+                                    value={xScoreThreshold}
+                                    onChange={(e) => { setXScoreThreshold(Number(e.target.value)); setCurrentPage(1); }}
+                                    className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
+                                />
+                                {/* REMPLACEMENT DU SPAN PAR UN INPUT TEXT */}
+                                <input
+                                    type="text"
+
+                                    value={xScoreThreshold}
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(/[^0-9]/g, ""); // numeric only
+                                        const value = Number(val);
+                                        // Optionnel : Limiter la valeur aux bornes min/max
+                                        // const boundedValue = Math.min(maxScore, Math.max(minScore, value));
+
+                                        setXScoreThreshold(value);
+                                        setCurrentPage(1);
+                                    }}
+
+
+                                    //className="w-12 text-right font-mono text-xs p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400"
+                                    className="w-10 text-right font-mono text-xs text-blue-600 dark:text-blue-400 bg-transparent border border-gray-300 dark:border-gray-600 rounded px-1 focus:outline-none focus:ring-1 focus:ring-blue-400 no-spinner"
+                                />
+                            </div>
+                        )}
+                    </div>
+                    {/* FIN NOUVEAU BLOC DE FILTRE X SCORE */}
+
                     <input
                         value={profileSearch}
                         onChange={(e) => setProfileSearch(e.target.value)}
@@ -534,6 +665,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                             getTopicMeta={getTopicMeta}
                             dataset={dataset}
                             metric="rankTotal"
+                            xScoreFilterMode={xScoreFilterMode} // PASSAGE DE LA NOUVELLE PROP
                         />
                     ))}
                 </div>
@@ -545,7 +677,6 @@ export default function LeagueLeaderboard(): JSX.Element {
                                 <th className="px-3 py-2 text-left text-xs font-medium">#</th>
                                 <th className="px-3 py-2 text-left text-xs font-medium">Profile</th>
                                 {selectedTopics.map((slug) => {
-                                    // FIX: Added fallback explicitly here for local rendering
                                     const meta = getTopicMeta(slug) ?? { topicSlug: slug, title: slug };
                                     return (
                                         <th
@@ -618,7 +749,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                     </table>
                 </div>
             )}
-
+            {/* Pagination reste inchangé */}
             {filteredProfiles.length > itemsPerPage && (
                 <div className="flex justify-center items-center gap-3 my-4 pb-6">
                     <button

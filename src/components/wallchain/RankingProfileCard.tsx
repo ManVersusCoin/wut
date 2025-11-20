@@ -4,7 +4,7 @@ import StatsShareModal from "./StatsShareModal";
 
 // --- Types for 'p' (profile) prop ---
 // EXPORT these types
-export type RankEntry = { // <-- Ajout de 'export'
+export type RankEntry = {
     rankTotal?: number;
     rank?: number;
     rankSignal?: number;
@@ -12,15 +12,17 @@ export type RankEntry = { // <-- Ajout de 'export'
     totalPoints?: number;
 };
 
-// FIX 1: handle is now optional (handle?: string) to match LeagueLeaderboard data
-// EXPORT this type
-export type Profile = { // <-- Ajout de 'export'
+// Type pour le mode de filtre du score X
+type XScoreFilterMode = "all" | "gt" | "lt";
+
+export type Profile = {
     userId?: string;
     handle?: string;
-    avatarUrl?: string;
+    avatarUrl?: string | null;
     name?: string;
     ranksFiltered: Record<string, RankEntry | undefined>;
     generatedAt?: number;
+    __xScore?: number; // X Score (valeur brute totalPoints)
 };
 // --- Types for Topic Metadata ---
 interface TopicMetaIn {
@@ -28,7 +30,7 @@ interface TopicMetaIn {
     topicSlug?: string;
     companyId?: string;
     id?: string;
-    logoUrl?: string | null; // FIX 2: Added | null to match LeagueLeaderboard type
+    logoUrl?: string | null;
     title?: string;
     companyName?: string;
 }
@@ -36,14 +38,14 @@ interface TopicMetaIn {
 // The *final* normalized shape we want to use (slug is required)
 type NormalizedTopicMeta = {
     topicSlug: string;
-    logoUrl?: string | null; // FIX 3: Added | null
+    logoUrl?: string | null;
     title?: string;
 };
 
 // The *intermediate* shape returned by normalizeTopicMeta (slug might be undefined)
 type NormalizedTopicMetaLoose = {
     topicSlug: string | undefined;
-    logoUrl?: string | null; // FIX 4: Added | null
+    logoUrl?: string | null;
     title?: string | undefined;
 };
 
@@ -54,6 +56,7 @@ interface RankingProfileCardProps {
     getTopicMeta: (slug: string) => TopicMetaIn | undefined; // This prop is used internally
     dataset: "tournament" | "7d" | "30d";
     metric: "rankTotal" | "rankSignal" | "rankNoise";
+    xScoreFilterMode: XScoreFilterMode; // NOUVELLE PROP
 }
 
 function RankingProfileCard({
@@ -63,6 +66,7 @@ function RankingProfileCard({
     getTopicMeta,
     dataset,
     metric,
+    xScoreFilterMode,
 }: RankingProfileCardProps) {
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -153,6 +157,18 @@ function RankingProfileCard({
             key={p.userId ?? p.handle}
             className="relative bg-gray-100 dark:bg-gray-800 rounded-xl p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
         >
+
+            {/* NOUVEAU BLOC X SCORE (positionné à gauche de Share) */}
+            {typeof p.__xScore === 'number' && xScoreFilterMode !== "all" && (
+                <div
+                    className="absolute top-2 right-10 text-xs font-semibold px-2 py-1 rounded-full bg-yellow-300 dark:bg-yellow-700 text-yellow-900 dark:text-yellow-200"
+                    title="Profile X Score"
+                >
+                    X Score: {p.__xScore.toFixed(1)}
+                </div>
+            )}
+            {/* FIN NOUVEAU BLOC X SCORE */}
+
             {/* Share icon */}
             <button
                 onClick={() => setModalOpen(true)}
