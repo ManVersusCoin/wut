@@ -223,21 +223,28 @@ function Sidebar({
     toggleStrategy: (id: string) => void;
     visibleColumns: Set<ColumnId>;
     toggleColumn: (id: ColumnId) => void;
-    toggleGroup: (group: string, ids: ColumnId[]) => void;
+    toggleGroup: (ids: ColumnId[]) => void;
 }) {
     const sidebarRef = useRef<HTMLDivElement>(null);
 
     // Close on click outside
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
-            if (isOpen && sidebarRef.current && !sidebarRef.current.contains(event.target as Node)) {
-                // Only close if clicking on the overlay (not the button, handled by parent)
-                // But simpler: The parent container usually handles the click-away if we structure it right.
-                // For absolute positioning over table, we need this.
+            const target = event.target as HTMLElement;
+
+            if (target.id === "sidebar-toggle-btn" || target.closest("#sidebar-toggle-btn")) {
+                return;
+            }
+
+            if (isOpen && sidebarRef.current && !sidebarRef.current.contains(target as Node)) {
                 onClose();
             }
         }
-        document.addEventListener("mousedown", handleClickOutside);
+
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, [isOpen, onClose]);
 
@@ -297,7 +304,7 @@ function Sidebar({
                     <div className="space-y-4">
                         {Object.entries(groupedCols).map(([group, cols]) => (
                             <div key={group}>
-                                <div className="flex items-center justify-between mb-1 group cursor-pointer" onClick={() => toggleGroup(group, cols.map(c => c.id))}>
+                                <div className="flex items-center justify-between mb-1 group cursor-pointer" onClick={() => toggleGroup(cols.map(c => c.id))}>
                                     <span className="text-xs font-semibold text-gray-700 dark:text-gray-300 group-hover:text-blue-600">{group}</span>
                                     <div className={`w-3 h-3 border rounded-sm flex items-center justify-center ${isGroupFullySelected(cols) ? "bg-blue-600 border-blue-600" : isGroupPartiallySelected(cols) ? "bg-blue-300 border-blue-300" : "border-gray-300 dark:border-gray-600"}`}>
                                         {isGroupFullySelected(cols) && <Check size={8} className="text-white" />}
@@ -516,10 +523,25 @@ export default function StrategyDashboard(): JSX.Element {
     // --- HELPERS ---
     const toggleStrategy = (id: string) => { const s = new Set(visibleStrategyIds); if (s.has(id)) s.delete(id); else s.add(id); setVisibleStrategyIds(s); };
     const toggleColumn = (id: ColumnId) => { const s = new Set(visibleColumns); if (s.has(id)) s.delete(id); else s.add(id); setVisibleColumns(s); };
-    const toggleGroup = (group: string, ids: ColumnId[]) => { const s = new Set(visibleColumns); const allSelected = ids.every(id => s.has(id)); ids.forEach(id => { if (allSelected) s.delete(id); else s.add(id); }); setVisibleColumns(s); };
+
+    const toggleGroup = (ids: ColumnId[]) => {
+        const s = new Set(visibleColumns);
+        const allSelected = ids.every(id => s.has(id));
+        ids.forEach(id => {
+            if (allSelected) s.delete(id);
+            else s.add(id);
+        });
+        setVisibleColumns(s);
+    };
     const handleSort = (key: ColumnId) => { let direction: "asc" | "desc" = "desc"; if (sortConfig?.key === key && sortConfig.direction === "desc") direction = "asc"; setSortConfig({ key, direction }); };
 
-    const fmtUSD = (n?: number) => n ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0, notation: "compact" }).format(n) : "-";
+    //const fmtUSD = (n?: number) => n ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0, notation: "compact" }).format(n) : "-";
+    const fmtUSD = (n?: number, decimals: number = 0) => n ? new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        maximumFractionDigits: decimals, // Uses the passed decimal count (default 0)
+        notation: "compact"
+    }).format(n) : "-";
     const fmtPrice = (n?: number) => n ? "$" + n.toFixed(4) : "-";
     const fmtNum = (n?: number) => n ? new Intl.NumberFormat('en-US', { notation: "compact" }).format(n) : "-";
     const fmtEth = (n?: number) => n ? `Ξ${n.toLocaleString('en-US', { maximumFractionDigits: 2 })}` : "-";
@@ -573,6 +595,7 @@ export default function StrategyDashboard(): JSX.Element {
             <header className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 px-6 py-4 flex justify-between items-center shrink-0 z-50 relative">
                 <div className="flex items-center gap-4">
                     <button
+                        id="sidebar-toggle-btn"
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
                         className={`p-2 rounded-md transition-colors ${isSidebarOpen ? "bg-blue-100 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400" : "hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-500"}`}
                     >
@@ -596,7 +619,7 @@ export default function StrategyDashboard(): JSX.Element {
             </header>
 
             {/* CONTENT CONTAINER */}
-            <div className="relative flex-1 overflow-hidden">
+            <div className="relative flex-1 overflow-hidden ">
 
                 {/* ABSOLUTE OVERLAY SIDEBAR */}
                 <Sidebar
@@ -667,7 +690,7 @@ export default function StrategyDashboard(): JSX.Element {
                                                         {col.id === "price" && <div className="font-medium text-gray-900 dark:text-gray-200">{fmtPrice(parseFloat(s.poolData.price_usd))}</div>}
                                                         {col.id === "volume24h" && (s.volume24h ? <div className="text-gray-500 text-xs">{fmtUSD(s.volume24h)}</div> : "-")}
                                                         {col.id === "priceChange24h" && (s.priceChange24h !== undefined ? <div className={`flex items-center justify-end gap-1 text-xs font-medium ${s.priceChange24h >= 0 ? "text-green-600 bg-green-50 dark:bg-green-900/20 px-1.5 py-0.5 rounded" : "text-red-600 bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded"}`}>{s.priceChange24h >= 0 ? <TrendingUp size={10} /> : <TrendingDown size={10} />} {Math.abs(s.priceChange24h).toFixed(2)}%</div> : "-")}
-                                                        {col.id === "stratMcap" && fmtUSD(parseFloat(s.poolData.market_cap_usd))}
+                                                        {col.id === "stratMcap" && fmtUSD(parseFloat(s.poolData.market_cap_usd), 2)}
 
                                                         {col.id === "burn" && (
                                                             <div className="flex flex-col items-end">

@@ -6,8 +6,8 @@ import { X } from "lucide-react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const [sidebarOpen, setSidebarOpen] = useState(false);
-    
-    
+
+
     return (
         <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
             {/* Sidebar */}
@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 <Header onMenuClick={() => setSidebarOpen(true)} />
 
                 {/* Main content */}
-                <main className="flex-1 p-6 overflow-y-auto">
+                <main className="flex-1 p-6 overflow-y-auto  bg-white dark:bg-gray-900">
                     <div className="min-h-[calc(100vh-120px)]"> {/* Adjust height as needed */}
                         {children}
                     </div>
