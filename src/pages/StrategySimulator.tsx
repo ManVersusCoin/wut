@@ -913,9 +913,9 @@ export default function StrategyDashboard(): JSX.Element {
                                                         {/* UPDATED TREASURY CELL WITH NFT COUNT */}
                                                         {col.id === "treasury" && (
                                                             <div className="flex flex-col items-end">
-                                                                <div className="font-bold text-blue-600 dark:text-blue-400">{fmtEth((s.treasuryValueUsd || 0) / (ethPrice || 1))}</div>
+                                                                <div className="font-bold text-blue-600 dark:text-blue-400">{fmtUSD(s.treasuryValueUsd)}</div>
                                                                 <div className="text-[10px] text-gray-400 flex items-center gap-1">
-                                                                    {fmtUSD(s.treasuryValueUsd)}
+                                                                    {fmtEth((s.treasuryValueUsd || 0) / (ethPrice || 1))}
                                                                     <span className="text-gray-300 dark:text-gray-600">•</span>
                                                                     {s.inventoryCount || 0} NFTs
                                                                 </div>

@@ -25,7 +25,7 @@
     "coinImageUrl": "https://coin-images.coingecko.com/coins/images/12559/small/Avalanche_Circle_RedWhite_Trans.png?1696512369",
     "socialLinks": null,
     "createdAt": "2025-07-25T07:57:05.594Z",
-    "updatedAt": "2025-11-19T13:50:21.288Z",
+    "updatedAt": "2025-11-20T13:50:06.509Z",
     "fetchedAt": "2025-11-19T13:50:18.164Z",
     "narrativeLinks": [
       {
@@ -115,7 +115,7 @@
       }
     ],
     "createdAt": "2025-07-25T07:53:18.977Z",
-    "updatedAt": "2025-11-19T13:50:20.604Z",
+    "updatedAt": "2025-11-20T13:50:05.777Z",
     "fetchedAt": "2025-11-12T13:50:13.980Z",
     "narrativeLinks": [
       {
@@ -187,6 +187,64 @@
     ],
     "topicSlug": "rubic",
     "logoUrl": "/rubic.png"
+  },
+  {
+    "id": "8453d816-d0cb-4242-b864-ccdf1946febd",
+    "stage": "",
+    "featured": true,
+    "hidden": false,
+    "mindshare": 0.01,
+    "twitterId": "1250422746770620430",
+    "twitterUsername": "MyCoralApp",
+    "twitterDisplayName": "CoralApp",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1972782913881006080/TgYvNP4l_400x400.jpg",
+    "twitterDescription": "The 1st mobile ecosystem crafted for multi-chain landscape｜Incubated by @YziLabs｜Empowering web3 through AI inference",
+    "twitterDescriptionLink": null,
+    "twitterFollowersCount": 90918,
+    "twitterFollowingCount": 113,
+    "twitterIsVerified": true,
+    "twitterGoldBadge": true,
+    "twitterLang": "",
+    "twitterCreatedAt": "2020-04-15T13:56:45.000Z",
+    "coinSymbol": "",
+    "coinMarketCap": 0,
+    "coinPrice": 0,
+    "coinContractAddress": "",
+    "coinName": "",
+    "coinImageUrl": "",
+    "socialLinks": null,
+    "createdAt": "2025-08-14T05:36:10.579Z",
+    "updatedAt": "2025-08-14T05:45:13.303Z",
+    "fetchedAt": "2025-08-14T05:36:10.579Z",
+    "narrativeLinks": [],
+    "rewardPools": [
+      {
+        "id": "cmeebz52c0000nz3w01inzgpx",
+        "title": "$30K to the top 100 minders",
+        "description": "",
+        "reward": "",
+        "rewardRate": 0,
+        "rewardUnit": "",
+        "deadline": null,
+        "startDate": "2025-08-18T00:00:00.000Z",
+        "endDate": "2025-09-18T00:00:00.000Z",
+        "platforms": [
+          "Twitter"
+        ],
+        "status": "closed",
+        "type": "campaign",
+        "paymentCurrency": "USDT",
+        "totalAmountUsd": 30000,
+        "paidOutUsd": 30000,
+        "campaignTargetViews": 0,
+        "participantsCount": 0,
+        "completedCount": 0,
+        "requirements": [],
+        "projectId": "8453d816-d0cb-4242-b864-ccdf1946febd"
+      }
+    ],
+    "topicSlug": "coralapp",
+    "logoUrl": "/coralapp.jpg"
   },
   {
     "id": "2973e5ba-68fc-4efa-bf92-230d2b4954c5",
@@ -264,23 +322,23 @@
     "logoUrl": "/tria.jpg"
   },
   {
-    "id": "8453d816-d0cb-4242-b864-ccdf1946febd",
+    "id": "a9a544fb-59c9-4ed2-bc83-866a72793381",
     "stage": "",
     "featured": true,
     "hidden": false,
     "mindshare": 0.01,
-    "twitterId": "1250422746770620430",
-    "twitterUsername": "MyCoralApp",
-    "twitterDisplayName": "CoralApp",
-    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1972782913881006080/TgYvNP4l_400x400.jpg",
-    "twitterDescription": "The 1st mobile ecosystem crafted for multi-chain landscape｜Incubated by @YziLabs｜Empowering web3 through AI inference",
+    "twitterId": "1458007981031833608",
+    "twitterUsername": "elympics_ai",
+    "twitterDisplayName": "Elympics",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1946319759991242752/G9OQ5zaG_200x200.jpg",
+    "twitterDescription": "Multichain entertainment infra bridging global IPs to Play2Win games across superapps.",
     "twitterDescriptionLink": null,
-    "twitterFollowersCount": 90918,
-    "twitterFollowingCount": 113,
+    "twitterFollowersCount": 213820,
+    "twitterFollowingCount": 508,
     "twitterIsVerified": true,
     "twitterGoldBadge": true,
     "twitterLang": "",
-    "twitterCreatedAt": "2020-04-15T13:56:45.000Z",
+    "twitterCreatedAt": "2021-11-09T09:47:39.000Z",
     "coinSymbol": "",
     "coinMarketCap": 0,
     "coinPrice": 0,
@@ -288,13 +346,13 @@
     "coinName": "",
     "coinImageUrl": "",
     "socialLinks": null,
-    "createdAt": "2025-08-14T05:36:10.579Z",
-    "updatedAt": "2025-08-14T05:45:13.303Z",
-    "fetchedAt": "2025-08-14T05:36:10.579Z",
+    "createdAt": "2025-08-14T05:35:47.986Z",
+    "updatedAt": "2025-08-14T05:44:57.272Z",
+    "fetchedAt": "2025-08-14T05:35:47.986Z",
     "narrativeLinks": [],
     "rewardPools": [
       {
-        "id": "cmeebz52c0000nz3w01inzgpx",
+        "id": "cmeec0bxo0001nz3w1i95dk2b",
         "title": "$30K to the top 100 minders",
         "description": "",
         "reward": "",
@@ -315,11 +373,11 @@
         "participantsCount": 0,
         "completedCount": 0,
         "requirements": [],
-        "projectId": "8453d816-d0cb-4242-b864-ccdf1946febd"
+        "projectId": "a9a544fb-59c9-4ed2-bc83-866a72793381"
       }
     ],
-    "topicSlug": "coralapp",
-    "logoUrl": "/coralapp.jpg"
+    "topicSlug": "elympics",
+    "logoUrl": "/elympics.jpg"
   },
   {
     "id": "0cace7b0-f488-4d0a-803d-b2cca192eb2b",
@@ -380,61 +438,74 @@
     "logoUrl": "/mindo_ai.jpg"
   },
   {
-    "id": "a9a544fb-59c9-4ed2-bc83-866a72793381",
+    "id": "e162c610-1eb7-437d-a5ea-9137684ea33c",
     "stage": "",
     "featured": true,
-    "hidden": false,
+    "hidden": true,
     "mindshare": 0.01,
-    "twitterId": "1458007981031833608",
-    "twitterUsername": "elympics_ai",
-    "twitterDisplayName": "Elympics",
-    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1946319759991242752/G9OQ5zaG_200x200.jpg",
-    "twitterDescription": "Multichain entertainment infra bridging global IPs to Play2Win games across superapps.",
-    "twitterDescriptionLink": null,
-    "twitterFollowersCount": 213820,
-    "twitterFollowingCount": 508,
-    "twitterIsVerified": true,
-    "twitterGoldBadge": true,
-    "twitterLang": "",
-    "twitterCreatedAt": "2021-11-09T09:47:39.000Z",
+    "twitterId": "1574805489371975681",
+    "twitterUsername": "TauntCoin",
+    "twitterDisplayName": "TauntAI",
+    "twitterAvatarUrl": "https://pbs.twimg.com/profile_images/1877866751016538112/DtD_kKnd_normal.jpg",
+    "twitterDescription": "TauntAI – AI-powered overlay system that sits on top of any video content, anywhere, transforming live streams into interactive prediction markets. Make live predictions, compete with fans, and earn rewards – all inside the video.\n\nPowered by $TNT across Battleworld, Predictz, and the entire Taunt ecosystem.",
+    "twitterDescriptionLink": "",
+    "twitterFollowersCount": 14436,
+    "twitterFollowingCount": 0,
+    "twitterIsVerified": false,
+    "twitterGoldBadge": false,
+    "twitterLang": "en",
+    "twitterCreatedAt": "2025-11-19T14:28:18.087Z",
     "coinSymbol": "",
     "coinMarketCap": 0,
     "coinPrice": 0,
     "coinContractAddress": "",
     "coinName": "",
     "coinImageUrl": "",
-    "socialLinks": null,
-    "createdAt": "2025-08-14T05:35:47.986Z",
-    "updatedAt": "2025-08-14T05:44:57.272Z",
-    "fetchedAt": "2025-08-14T05:35:47.986Z",
+    "socialLinks": [
+      {
+        "link": "https://www.taunttoken.io/",
+        "title": "Website"
+      },
+      {
+        "link": "https://t.me/+wFoIGPZ2HTw1OWRh",
+        "title": "Telegram"
+      },
+      {
+        "link": "https://twitter.com/TauntCoin",
+        "title": "X Profile"
+      }
+    ],
+    "createdAt": "2025-11-21T16:01:53.361Z",
+    "updatedAt": "2025-11-21T16:45:10.384Z",
+    "fetchedAt": "2025-11-21T16:01:53.361Z",
     "narrativeLinks": [],
     "rewardPools": [
       {
-        "id": "cmeec0bxo0001nz3w1i95dk2b",
-        "title": "$30K to the top 100 minders",
-        "description": "",
+        "id": "cmi92ux1200bxoh3uuy95wdij",
+        "title": "$40K in $TNT + $20K in $USDT ($30K/Month)",
+        "description": "$TNT - 30% TGE, no cliff, 5-month linear vesting",
         "reward": "",
         "rewardRate": 0,
         "rewardUnit": "",
         "deadline": null,
-        "startDate": "2025-08-18T00:00:00.000Z",
-        "endDate": "2025-09-18T00:00:00.000Z",
+        "startDate": "2025-11-24T00:00:00.000Z",
+        "endDate": "2026-01-24T00:00:00.000Z",
         "platforms": [
           "Twitter"
         ],
-        "status": "closed",
+        "status": "upcoming",
         "type": "campaign",
         "paymentCurrency": "USDT",
-        "totalAmountUsd": 30000,
-        "paidOutUsd": 30000,
+        "totalAmountUsd": 60000,
+        "paidOutUsd": 0,
         "campaignTargetViews": 0,
         "participantsCount": 0,
         "completedCount": 0,
         "requirements": [],
-        "projectId": "a9a544fb-59c9-4ed2-bc83-866a72793381"
+        "projectId": "e162c610-1eb7-437d-a5ea-9137684ea33c"
       }
     ],
-    "topicSlug": "elympics",
-    "logoUrl": "/elympics.jpg"
+    "topicSlug": "tauntai",
+    "logoUrl": "/tauntai.jpg"
   }
 ]

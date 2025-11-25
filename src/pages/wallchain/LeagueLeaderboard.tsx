@@ -1,7 +1,7 @@
 ﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { JSX } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, BarChart3 } from "lucide-react";
 
 import RankingProfileCard from "../../components/wallchain/RankingProfileCard";
 
@@ -52,6 +52,17 @@ const TOP_OPTIONS = [50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 
 // Type pour le mode de filtre du score X
 type XScoreFilterMode = "all" | "gt" | "lt"; // 'gt' pour >, 'lt' pour <
 
+function calculateMedian(arr: number[]): number {
+    if (!arr.length) return 0;
+    const sorted = [...arr].sort((a, b) => a - b);
+    const middle = Math.floor(sorted.length / 2);
+
+    if (sorted.length % 2 === 0) {
+        return (sorted[middle - 1] + sorted[middle]) / 2;
+    }
+    return sorted[middle];
+}
+
 export default function LeagueLeaderboard(): JSX.Element {
     const [globalProfiles, setGlobalProfiles] = useState<GlobalProfile[]>([]);
     const [topicMetas, setTopicMetas] = useState<TopicMeta[]>([]);
@@ -71,13 +82,15 @@ export default function LeagueLeaderboard(): JSX.Element {
     const [topicCountFilter, setTopicCountFilter] = useState<number | null>(null);
     const [generationDate, setGenerationDate] = useState<Date | null>(null);
 
+
+
     // NOUVEAUX ÉTATS POUR LE FILTRE X Score
     const [xScoreFilterMode, setXScoreFilterMode] = useState<XScoreFilterMode>("all");
     const [xScoreThreshold, setXScoreThreshold] = useState<number>(80); // Le seuil de filtrage (valeur brute)
     const [minScore, setMinScore] = useState<number>(0); // Min score trouvé dans les données
     const [maxScore, setMaxScore] = useState<number>(1000); // Max score trouvé dans les données
     // Fin Nouveaux États
-
+    const [showStatsModal, setShowStatsModal] = useState(false);
     // Load Wallchain data
     useEffect(() => {
         const load = async () => {
@@ -326,6 +339,65 @@ export default function LeagueLeaderboard(): JSX.Element {
         return arr.filter((p) => Object.keys(p.ranksFiltered).length > 0) as ProfileForCard[];
     }, [derivedProfiles, selectedTopics, profileSearch, topLimit, sortConfig, topicCountFilter, xScoreFilterMode, xScoreThreshold]);
 
+    const getTopicMeta = (slug: string): TopicMeta | undefined =>
+        topicMetas.find((t) => t.topicSlug === slug);
+
+
+    const xScoreStatsByTopic = useMemo(() => {
+        const topicScores = new Map<string, number[]>();
+
+        // 1. Collecter tous les scores X (bruts) pour chaque topic actif dans les profils filtrés
+        for (const p of filteredProfiles) {
+            // Le __xScore est le score brut du profil
+            const xScore = p.__xScore;
+
+            // On itère sur les topics du profil qui sont DANS le filtre actuel (ranksFiltered)
+            for (const topicSlug of Object.keys(p.ranksFiltered)) {
+                if (!topicScores.has(topicSlug)) {
+                    topicScores.set(topicSlug, []);
+                }
+                topicScores.get(topicSlug)!.push(xScore);
+            }
+        }
+
+        // 2. Calculer les statistiques (Avg, Median, Min, Max)
+        const stats: {
+            topicSlug: string;
+            title: string;
+            logoUrl?: string | null;
+            avg: number;
+            median: number;
+            max: number;
+            min: number;
+            count: number;
+        }[] = [];
+
+        for (const [topicSlug, scores] of topicScores.entries()) {
+            if (scores.length === 0) continue;
+
+            const sum = scores.reduce((a, b) => a + b, 0);
+            const avg = sum / scores.length;
+            const median = calculateMedian(scores);
+            const max = Math.max(...scores);
+            const min = Math.min(...scores);
+            const meta = getTopicMeta(topicSlug) ?? { topicSlug, title: topicSlug };
+
+            stats.push({
+                topicSlug,
+                title: meta.title || topicSlug,
+                logoUrl: meta.logoUrl,
+                avg,
+                median,
+                max,
+                min,
+                count: scores.length,
+            });
+        }
+
+        // Triez par moyenne décroissante
+        return stats.sort((a, b) => b.avg - a.avg);
+
+    }, [filteredProfiles, getTopicMeta]);
 
     const topicCountOptions = useMemo(() => {
         const counts: Record<number, number> = {};
@@ -366,8 +438,25 @@ export default function LeagueLeaderboard(): JSX.Element {
     const start = (currentPage - 1) * itemsPerPage;
     const pageProfiles = filteredProfiles.slice(start, start + itemsPerPage);
 
-    const getTopicMeta = (slug: string): TopicMeta | undefined =>
-        topicMetas.find((t) => t.topicSlug === slug);
+    const rankedText = useMemo(() => {
+        let text = "";
+        const limitText = `Top ${topLimit}`;
+        const datasetText = dataset === "tournament" ? "Current Epoch LBs" : dataset.toUpperCase();
+        const selectedTopicsText = selectedTopics.length > 0
+            ? `${selectedTopics.length} topic${selectedTopics.length > 1 ? "s" : ""}`
+            : "All Topics";
+
+        const xScoreFilterText = xScoreFilterMode === "all"
+            ? "All X Scores"
+            : xScoreFilterMode === "gt"
+                ? `X Score > ${xScoreThreshold}`
+                : `X Score < ${xScoreThreshold}`;
+
+        text += `${datasetText} / ${limitText} / ${selectedTopicsText} / ${xScoreFilterText}`;
+
+        return text;
+    }, [topLimit, dataset, selectedTopics.length, xScoreFilterMode, xScoreThreshold]);
+
 
     const handleSort = (slug: string) => {
         setSortConfig((prev) => {
@@ -610,7 +699,14 @@ export default function LeagueLeaderboard(): JSX.Element {
                         )}
                     </div>
                     {/* FIN NOUVEAU BLOC DE FILTRE X SCORE */}
-
+                    <button
+                        onClick={() => setShowStatsModal(true)}
+                        disabled={xScoreStatsByTopic.length === 0}
+                        title="View X Score Statistics by Topic"
+                        className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm flex items-center justify-center transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    </button>
                     <input
                         value={profileSearch}
                         onChange={(e) => setProfileSearch(e.target.value)}
@@ -769,6 +865,93 @@ export default function LeagueLeaderboard(): JSX.Element {
                     >
                         Next
                     </button>
+                </div>
+            )}
+            {/* X Score Stats Modal */}
+            {showStatsModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75 p-4"
+                    onClick={() => setShowStatsModal(false)}
+                >
+                    <div
+                        className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h3 className="text-xl font-bold">Statistics by X Score</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                X Score statistics for **{rankedText}**
+                            </p>
+                        </div>
+
+                        {/* Table Content */}
+                        <div className="flex-grow overflow-auto">
+                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800">
+                                    <tr>
+                                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Campaign
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Average X Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Median X Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Max X Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Min X Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Profiles
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                                    {xScoreStatsByTopic.map((s) => (
+                                        <tr key={s.topicSlug} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                                                <img
+                                                    src={s.logoUrl || "/default-avatar.jpg"}
+                                                    alt={s.title}
+                                                    className="w-6 h-6 rounded-full"
+                                                />
+                                                {s.title}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.avg.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.median.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.max.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.min.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right text-gray-500">
+                                                {s.count}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                            <button
+                                onClick={() => setShowStatsModal(false)}
+                                className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
                 </div>
             )}
         </div>
