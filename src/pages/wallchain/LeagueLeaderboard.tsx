@@ -32,6 +32,8 @@ type GlobalProfile = {
     handle?: string;
     name?: string;
     avatarUrl?: string | null;
+    ethos_score?: number;
+    ethosInfluenceFactor?: number;
     topics: TopicEntry[];
 };
 
@@ -43,6 +45,7 @@ type ProfileForCard = {
     name?: string;
     ranks: Record<string, any>;
     ranksFiltered: Record<string, any>;
+    ethosScore?: number;
     __score?: number;
     __xScore: number; // Valeur brute (totalPoints)
 };
@@ -51,6 +54,7 @@ const TOP_OPTIONS = [50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 
 
 // Type pour le mode de filtre du score X
 type XScoreFilterMode = "all" | "gt" | "lt"; // 'gt' pour >, 'lt' pour <
+type EthosScoreFilterMode = "all" | "gt" | "lt"; // 'gt' pour >, 'lt' pour <
 
 function calculateMedian(arr: number[]): number {
     if (!arr.length) return 0;
@@ -69,7 +73,7 @@ export default function LeagueLeaderboard(): JSX.Element {
     const [loading, setLoading] = useState(true);
 
     const [dataset, setDataset] = useState<"tournament" | "7d" | "30d">("tournament");
-    const [topLimit, setTopLimit] = useState<number>(500);
+    const [topLimit, setTopLimit] = useState<number>(1000);
     const [profileSearch, setProfileSearch] = useState("");
     const [selectedTopics, setSelectedTopics] = useState<string[]>([]);
     const [topicDropdownOpen, setTopicDropdownOpen] = useState(false);
@@ -89,16 +93,26 @@ export default function LeagueLeaderboard(): JSX.Element {
     const [xScoreThreshold, setXScoreThreshold] = useState<number>(80); // Le seuil de filtrage (valeur brute)
     const [minScore, setMinScore] = useState<number>(0); // Min score trouvé dans les données
     const [maxScore, setMaxScore] = useState<number>(1000); // Max score trouvé dans les données
+
+    const [ethosScoreFilterMode, setEthosScoreFilterMode] = useState<EthosScoreFilterMode>("all");
+    const [ethosScoreThreshold, setEthosScoreThreshold] = useState<number>(1200); // Le seuil de filtrage (valeur brute)
+    const [minEthosScore, setMinEthosScore] = useState<number>(0); // Min score trouvé dans les données
+    const [maxEthosScore, setMaxEthosScore] = useState<number>(5000); // Max score trouvé dans les données
+
     // Fin Nouveaux États
     const [showStatsModal, setShowStatsModal] = useState(false);
+    const [showEthosStatsModal, setShowEthosStatsModal] = useState(false);
+
     // Load Wallchain data
     useEffect(() => {
         const load = async () => {
             setLoading(true);
             try {
                 const [gRes, tRes] = await Promise.all([
-                    fetch("/leaderboards/wallchain_global/latest.json"),
-                    fetch("/wallchain_topics_raw.json").catch(() => null),
+                    //fetch("/leaderboards/wallchain_global/latest.json"),
+                    //fetch("/wallchain_topics_raw.json").catch(() => null),
+                    fetch("https://infofi.wut-tw.workers.dev/wallchain_rankings"),
+                    fetch("https://infofi.wut-tw.workers.dev/wallchain_topics").catch(() => null),
                 ]);
 
                 if (!gRes.ok) throw new Error("Failed to fetch wallchain_global/latest.json");
@@ -183,6 +197,37 @@ export default function LeagueLeaderboard(): JSX.Element {
 
     }, [globalProfiles, minScore, maxScore, xScoreThreshold]);
 
+    // Calcul et mise à jour des Ethos scores min/max et du seuil initial
+    useEffect(() => {
+        let currentEthosMin = Infinity;
+        let currentEthosMax = -Infinity;
+
+        for (const p of globalProfiles) {
+            if (typeof p.ethos_score === "number") {
+                currentEthosMin = Math.min(currentEthosMin, p.ethos_score);
+                currentEthosMax = Math.max(currentEthosMax, p.ethos_score);
+            }
+        }
+
+        // Arrondir les scores min et max pour le curseur
+        const finalEthosMin = currentEthosMin === Infinity ? 0 : Math.floor(currentEthosMin);
+        const finalEthosMax = currentEthosMax === -Infinity ? 5000 : Math.ceil(currentEthosMax);
+
+
+        
+        // Mettre à jour les états min/max
+        if (finalEthosMin !== minEthosScore) setMinEthosScore(finalEthosMin);
+        if (finalEthosMax !== maxEthosScore) setMaxEthosScore(finalEthosMax);
+
+        console.log("Ethos Score Min/Max:", finalEthosMin, finalEthosMax);
+        // Initialiser le seuil au max la première fois que les données sont chargées
+        if (globalProfiles.length > 0 && ethosScoreThreshold === 0) {
+            setEthosScoreThreshold(finalEthosMax);
+        }
+
+    }, [globalProfiles, minEthosScore, maxEthosScore, ethosScoreThreshold]);
+
+
 
     // Calcul des profiles dérivés (seulement le __xScore non normalisé)
     const derivedProfiles: ProfileForCard[] = useMemo(() => {
@@ -202,7 +247,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                     profileTotalPoints = t.totalPoints;
                 }
             }
-
+            
             return {
                 userId: p.handle,
                 handle: p.handle,
@@ -210,6 +255,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                 avatarUrl: p.avatarUrl,
                 ranks: ranks,
                 ranksFiltered: {},
+                ethosScore: p.ethos_score || 0,
                 __score: 0,
                 __xScore: profileTotalPoints, // Valeur brute
             } as ProfileForCard;
@@ -283,6 +329,25 @@ export default function LeagueLeaderboard(): JSX.Element {
         }
         // FIN FILTRE X SCORE
 
+        // 2.1 FILTRE Ethos SCORE (utilise la valeur brute)
+        const ethosThreshold = Number(ethosScoreThreshold);
+
+        if (ethosScoreFilterMode !== "all" && Number.isFinite(ethosThreshold)) {
+            arr = arr.filter((p) => {
+                // si pas de score, on exclut l'item
+                if (p.ethosScore == null || typeof p.ethosScore !== 'number') return false;
+
+                if (ethosScoreFilterMode === "gt") {
+                    return p.ethosScore >= ethosThreshold;
+                }
+                if (ethosScoreFilterMode === "lt") {
+                    return p.ethosScore <= ethosThreshold;
+                }
+                return true;
+            });
+        }
+        // FIN FILTRE X SCORE
+
 
         // 3. Filtrer par recherche de profil
         if (profileSearch.trim()) {
@@ -337,7 +402,7 @@ export default function LeagueLeaderboard(): JSX.Element {
 
         // 6. Filtre final : retire les profils qui n'ont plus d'entrées de classement
         return arr.filter((p) => Object.keys(p.ranksFiltered).length > 0) as ProfileForCard[];
-    }, [derivedProfiles, selectedTopics, profileSearch, topLimit, sortConfig, topicCountFilter, xScoreFilterMode, xScoreThreshold]);
+    }, [derivedProfiles, selectedTopics, profileSearch, topLimit, sortConfig, topicCountFilter, xScoreFilterMode, xScoreThreshold, ethosScoreFilterMode, ethosScoreThreshold]);
 
     const getTopicMeta = (slug: string): TopicMeta | undefined =>
         topicMetas.find((t) => t.topicSlug === slug);
@@ -399,6 +464,64 @@ export default function LeagueLeaderboard(): JSX.Element {
 
     }, [filteredProfiles, getTopicMeta]);
 
+
+    const ethosScoreStatsByTopic = useMemo(() => {
+        const topicEthosScores = new Map<string, number[]>();
+
+        // 1. Collecter tous les scores X (bruts) pour chaque topic actif dans les profils filtrés
+        for (const p of filteredProfiles) {
+            // Le __xScore est le score brut du profil
+            const ethosScore = p.ethosScore || 0;
+
+            // On itère sur les topics du profil qui sont DANS le filtre actuel (ranksFiltered)
+            for (const topicSlug of Object.keys(p.ranksFiltered)) {
+                if (!topicEthosScores.has(topicSlug)) {
+                    topicEthosScores.set(topicSlug, []);
+                }
+                topicEthosScores.get(topicSlug)!.push(ethosScore);
+            }
+        }
+
+        // 2. Calculer les statistiques (Avg, Median, Min, Max)
+        const stats: {
+            topicSlug: string;
+            title: string;
+            logoUrl?: string | null;
+            avg: number;
+            median: number;
+            max: number;
+            min: number;
+            count: number;
+        }[] = [];
+
+        for (const [topicSlug, scores] of topicEthosScores.entries()) {
+            if (scores.length === 0) continue;
+
+            const sum = scores.reduce((a, b) => a + b, 0);
+            const avg = sum / scores.length;
+            const median = calculateMedian(scores);
+            const max = Math.max(...scores);
+            const min = Math.min(...scores);
+            const meta = getTopicMeta(topicSlug) ?? { topicSlug, title: topicSlug };
+
+            stats.push({
+                topicSlug,
+                title: meta.title || topicSlug,
+                logoUrl: meta.logoUrl,
+                avg,
+                median,
+                max,
+                min,
+                count: scores.length,
+            });
+        }
+
+        // Triez par moyenne décroissante
+        return stats.sort((a, b) => b.avg - a.avg);
+
+    }, [filteredProfiles, getTopicMeta]);
+
+
     const topicCountOptions = useMemo(() => {
         const counts: Record<number, number> = {};
         filteredProfiles.forEach((p) => {
@@ -452,10 +575,16 @@ export default function LeagueLeaderboard(): JSX.Element {
                 ? `X Score > ${xScoreThreshold}`
                 : `X Score < ${xScoreThreshold}`;
 
-        text += `${datasetText} / ${limitText} / ${selectedTopicsText} / ${xScoreFilterText}`;
+        const ethosScoreFilterText = ethosScoreFilterMode === "all"
+            ? "All Ethos Scores"
+            : ethosScoreFilterMode === "gt"
+                ? `Ethos Score > ${ethosScoreThreshold}`
+                : `Ethos Score < ${ethosScoreThreshold}`;
+
+        text += `${datasetText} / ${limitText} / ${selectedTopicsText} / ${xScoreFilterText} / ${ethosScoreFilterText} / ${ethosScoreFilterMode}`;
 
         return text;
-    }, [topLimit, dataset, selectedTopics.length, xScoreFilterMode, xScoreThreshold]);
+    }, [topLimit, dataset, selectedTopics.length, xScoreFilterMode, xScoreThreshold, ethosScoreFilterMode, ethosScoreThreshold]);
 
 
     const handleSort = (slug: string) => {
@@ -707,6 +836,76 @@ export default function LeagueLeaderboard(): JSX.Element {
                     >
                         <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </button>
+                    {/* NOUVEAU BLOC DE FILTRE ETHOS SCORE */}
+                    <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                        <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Ethos Score</span>
+
+                        {/* Toggle Buttons */}
+                        <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
+                            <button
+                                onClick={() => { setEthosScoreFilterMode("all"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${ethosScoreFilterMode === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                All
+                            </button>
+                            <button
+                                onClick={() => { setEthosScoreFilterMode("gt"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${ethosScoreFilterMode === "gt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                &gt;
+                            </button>
+                            <button
+                                onClick={() => { setEthosScoreFilterMode("lt"); setCurrentPage(1); }}
+                                className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${ethosScoreFilterMode === "lt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}
+                            >
+                                &lt;
+                            </button>
+                        </div>
+
+                        {/* Slider (Only if not All) */}
+                        {ethosScoreFilterMode !== "all" && (
+                            <div className="flex items-center gap-2 ml-1">
+                                <input
+                                    type="range"
+                                    min={minEthosScore}
+                                    max={maxEthosScore}
+                                    step="1"
+                                    value={ethosScoreThreshold}
+                                    onChange={(e) => { setEthosScoreThreshold(Number(e.target.value)); setCurrentPage(1); }}
+                                    className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
+                                />
+                                {/* REMPLACEMENT DU SPAN PAR UN INPUT TEXT */}
+                                <input
+                                    type="text"
+
+                                    value={ethosScoreThreshold}
+                                    onChange={(e) => {
+                                        const val = e.target.value.replace(/[^0-9]/g, ""); // numeric only
+                                        const value = Number(val);
+                                        // Optionnel : Limiter la valeur aux bornes min/max
+                                        // const boundedValue = Math.min(maxScore, Math.max(minScore, value));
+
+                                        setEthosScoreThreshold(value);
+                                        setCurrentPage(1);
+                                    }}
+
+
+                                    //className="w-12 text-right font-mono text-xs p-1 border rounded bg-white dark:bg-gray-700 border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-400"
+                                    className="w-10 text-right font-mono text-xs text-blue-600 dark:text-blue-400 bg-transparent border border-gray-300 dark:border-gray-600 rounded px-1 focus:outline-none focus:ring-1 focus:ring-blue-400 no-spinner"
+                                />
+                            </div>
+                        )}
+                    </div>
+                    <button
+                        onClick={() => setShowEthosStatsModal(true)}
+                        disabled={xScoreStatsByTopic.length === 0}
+                        title="View Ethos Score Statistics by Topic"
+                        className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm flex items-center justify-center transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    </button>
+
+                    {/* FIN NOUVEAU BLOC DE FILTRE ETHOS SCORE */}
                     <input
                         value={profileSearch}
                         onChange={(e) => setProfileSearch(e.target.value)}
@@ -761,7 +960,8 @@ export default function LeagueLeaderboard(): JSX.Element {
                             getTopicMeta={getTopicMeta}
                             dataset={dataset}
                             metric="rankTotal"
-                            xScoreFilterMode={xScoreFilterMode} // PASSAGE DE LA NOUVELLE PROP
+                            xScoreFilterMode={xScoreFilterMode} 
+                            ethosScoreFilterMode={ethosScoreFilterMode} 
                         />
                     ))}
                 </div>
@@ -946,6 +1146,93 @@ export default function LeagueLeaderboard(): JSX.Element {
                         <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
                             <button
                                 onClick={() => setShowStatsModal(false)}
+                                className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* Ethos Score Stats Modal */}
+            {showEthosStatsModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75 p-4"
+                    onClick={() => setShowEthosStatsModal(false)}
+                >
+                    <div
+                        className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h3 className="text-xl font-bold">Statistics by Ethos Score</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                Ethos Score statistics for **{rankedText}**
+                            </p>
+                        </div>
+
+                        {/* Table Content */}
+                        <div className="flex-grow overflow-auto">
+                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800">
+                                    <tr>
+                                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Campaign
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Average Ethos Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Median Ethos Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Max Ethos Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Min Ethos Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Profiles
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                                    {ethosScoreStatsByTopic.map((s) => (
+                                        <tr key={s.topicSlug} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                                                <img
+                                                    src={s.logoUrl || "/default-avatar.jpg"}
+                                                    alt={s.title}
+                                                    className="w-6 h-6 rounded-full"
+                                                />
+                                                {s.title}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.avg.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.median.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.max.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.min.toFixed(2)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right text-gray-500">
+                                                {s.count}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                            <button
+                                onClick={() => setShowEthosStatsModal(false)}
                                 className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                             >
                                 Close
