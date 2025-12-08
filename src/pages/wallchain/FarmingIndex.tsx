@@ -418,6 +418,7 @@ export default function FarmingIndexTable(): JSX.Element {
                                                                                 dataset={datasetPeriod}
                                                                                 metric="rankTotal"
                                                                                 xScoreFilterMode="all"
+                                                                                ethosScoreFilterMode="all"
                                                                             />
 
                                                                             {/* MODIFIÉ: Indicateur étoile verte (position changée) */}
