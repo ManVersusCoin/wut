@@ -10,6 +10,7 @@ interface RankingProfileCardProps {
     dataset: "tournament" | "7d" | "30d";
     metric: "rankTotal" | "rankSignal" | "rankNoise";
     noiseFilterMode: "all" | "gt" | "lt";
+    ethosScoreFilterMode: "all" | "gt" | "lt";
 }
 
 function RankingProfileCard({
@@ -20,6 +21,7 @@ function RankingProfileCard({
     dataset,
     metric,
     noiseFilterMode,
+    ethosScoreFilterMode,
 }: RankingProfileCardProps) {
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -48,6 +50,24 @@ function RankingProfileCard({
             key={p.userId}
             className="relative bg-gray-100 dark:bg-gray-800 rounded-xl p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition group/card"
         >
+            {(ethosScoreFilterMode !== "all") && (
+                <div className="absolute top-2 right-10 flex flex-row items-center gap-2 z-10">
+
+                    {/* Ethos Score */}
+                    {typeof p.ethos_score === "number" && (
+                        <span
+                            className="text-xs font-semibold px-2 py-1 rounded-full
+                bg-blue-300 dark:bg-blue-700
+                text-blue-900 dark:text-blue-200 shadow"
+                            title="Profile Ethos Score"
+                        >
+                            Ethos: {p.ethos_score.toFixed(1)}
+
+                        </span>
+                    )}
+
+                </div>
+            )}
             {/* Buttons in top-right */}
             <div className="absolute top-2 right-2 flex items-center gap-2">
                 <button
