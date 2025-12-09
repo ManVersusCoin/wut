@@ -642,7 +642,7 @@ export default function LeagueLeaderboard(): JSX.Element {
                 </div>
 
                 <div className="bg-red-500 dark:bg-red-800 rounded-xl p-4 shadow-md flex flex-col justify-between">
-                    <div className="text-white text-sm font-medium">Profile Coverage Ratio</div>
+                    <div className="text-white text-sm font-medium">Profile Uniqueness Ratio</div>
                     <div className="text-white text-2xl font-bold">{profileCoverageRatio.toFixed(2)}%</div>
                 </div>
             </div>
