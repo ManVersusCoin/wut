@@ -66,6 +66,22 @@ export default function LeagueLeaderboards(): JSX.Element {
     const [sortConfig, setSortConfig] = useState<{ slug: string; metric: string; direction: "asc" | "desc" } | null>(null);
     const [generationDate, setGenerationDate] = useState<Date | null>(null);
 
+
+    function isFutureOrValidEnd(now: any, endsAt: any): boolean {
+        if (!endsAt) return true;                      // null, undefined → inclure
+        if (typeof endsAt !== "string") return true;   // valeurs anormales → inclure
+
+        // Cas "Coming Soon", "Soon", "TBA", etc.
+        if (!/^\d{4}-\d{2}-\d{2}T/.test(endsAt)) {
+            return true;
+        }
+
+        const date = new Date(endsAt);
+        return date > now; // garde si la fin est dans le futur
+    }
+
+
+
     // load once
     useEffect(() => {
         const load = async () => {
@@ -84,9 +100,28 @@ export default function LeagueLeaderboards(): JSX.Element {
 
                 if (tRes && tRes.ok) {
                     const tjson = await tRes.json();
+
+                    // Définir la date actuelle pour le filtre
+                    const now = new Date();
+
                     // pick only isLeague topics (if present) and map to expected shape
                     const metas: TopicMeta[] = (Array.isArray(tjson) ? tjson : [])
-                        .filter((t: any) => t.isLeague !== false) // keep leagues (or all if no isLeague)
+                        // Premier filtre : uniquement les ligues
+                        .filter((t: any) => t.isLeague !== false)
+                        // Deuxième filtre : application de la logique de date et de statut
+                        .filter((t: any) => {
+                            // Conserver les éléments qui ne sont pas des ligues (si le filtre isLeague est ignoré, ils passeront ici)
+                            if (!t.isLeague) return false;
+
+                            const tour = t.tournament;
+                            if (!tour) return false;
+
+                            if (!tour.isActive) return false;
+
+                            // Intègre : null, "Coming Soon", ou fin dans le futur
+                            // **Assurez-vous que la fonction isFutureOrValidEnd est disponible dans ce scope**
+                            return isFutureOrValidEnd(now, tour.endsAt);
+                        })
                         .map((t: any) => ({
                             id: t.id,
                             title: t.title ?? t.topicSlug,
@@ -96,7 +131,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                         }));
                     setTopicMetas(metas);
                 } else {
-                    // Build topic metas from globalProfiles if topics_raw not available
+                    // ... (le bloc else reste inchangé)
                     const uniq = new Map<string, TopicMeta>();
                     gjson.forEach((p: GlobalProfile) =>
                         p.topics.forEach((te: TopicEntry) => {
