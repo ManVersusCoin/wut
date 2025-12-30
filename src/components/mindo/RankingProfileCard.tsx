@@ -21,6 +21,7 @@ export type Profile = { // <-- Ajout de 'export'
     name?: string;
     ranksFiltered: Record<string, RankEntry | undefined>;
     generatedAt?: number;
+    ethos_score?: number;
 };
 // --- Types for Topic Metadata ---
 interface TopicMetaIn {
@@ -54,6 +55,7 @@ interface RankingProfileCardProps {
     getTopicMeta: (slug: string) => TopicMetaIn | undefined; // This prop is used internally
     dataset: "tournament" | "7d" | "30d";
     metric: "rankTotal" | "rankSignal" | "rankNoise";
+    ethosScoreFilterMode: "all" | "gt" | "lt";
 }
 
 function RankingProfileCard({
@@ -63,6 +65,7 @@ function RankingProfileCard({
     getTopicMeta,
     dataset,
     metric,
+    ethosScoreFilterMode,
 }: RankingProfileCardProps) {
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -153,6 +156,24 @@ function RankingProfileCard({
             key={p.userId ?? p.handle}
             className="relative bg-gray-100 dark:bg-gray-800 rounded-xl p-3 hover:bg-gray-200 dark:hover:bg-gray-700 transition"
         >
+            {(ethosScoreFilterMode !== "all") && (
+                <div className="absolute top-2 right-10 flex flex-row items-center gap-2 z-10">
+
+                    {/* Ethos Score */}
+                    {typeof p.ethos_score === "number" && (
+                        <span
+                            className="text-xs font-semibold px-2 py-1 rounded-full
+                bg-blue-300 dark:bg-blue-700
+                text-blue-900 dark:text-blue-200 shadow"
+                            title="Profile Ethos Score"
+                        >
+                            Ethos: {p.ethos_score.toFixed(1)}
+
+                        </span>
+                    )}
+
+                </div>
+            )}
             {/* Share icon */}
             <button
                 onClick={() => setModalOpen(true)}
