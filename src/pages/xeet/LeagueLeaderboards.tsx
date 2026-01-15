@@ -1,10 +1,9 @@
 ﻿/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { JSX } from "react";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { BarChart3 } from "lucide-react"; // Ajout de BarChart3
+import { BarChart3, Users } from "lucide-react";
 import InfoModal from "../../components/xeet/InfoModal";
 import RankingProfileCard from "../../components/xeet/RankingProfileCard";
-
 // Helper function pour les stats
 function calculateMedian(arr: number[]): number {
     if (!arr.length) return 0;
@@ -36,6 +35,9 @@ type TopicEntry = {
     totalPoints?: number;
     noiseRatio?: number;
     signalRatio?: number;
+    isVerified?: boolean;
+    followersCount?: number | null;
+    multiplier?: number;
 };
 
 type GlobalProfile = {
@@ -45,14 +47,17 @@ type GlobalProfile = {
     twitterId?: string;
     userId?: string;
     topics: TopicEntry[];
-    // Ajout des champs Ethos
     ethos_score?: number;
     ethosInfluenceFactor?: number;
+    isVerified?: boolean;
+    followersCount?: number | null;
 };
 
 // UI types
 const TOP_OPTIONS = [50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 800, 900, 1000];
 type EthosScoreFilterMode = "all" | "gt" | "lt";
+type VerifiedFilterMode = "all" | "verified" | "nonverified";
+
 
 export default function LeagueLeaderboards(): JSX.Element {
     // raw loaded data
@@ -76,13 +81,22 @@ export default function LeagueLeaderboards(): JSX.Element {
     const [noiseFilterMode, setNoiseFilterMode] = useState<"all" | "gt" | "lt">("all");
     const [noiseThreshold, setNoiseThreshold] = useState<number>(0);
 
-    // --- NOUVEAUX ÉTATS POUR LE FILTRE ETHOS SCORE ---
+    // Ethos Score Filter State
     const [ethosScoreFilterMode, setEthosScoreFilterMode] = useState<EthosScoreFilterMode>("all");
     const [ethosScoreThreshold, setEthosScoreThreshold] = useState<number>(1200);
     const [minEthosScore, setMinEthosScore] = useState<number>(0);
     const [maxEthosScore, setMaxEthosScore] = useState<number>(5000);
     const [showEthosStatsModal, setShowEthosStatsModal] = useState(false);
-    // --------------------------------------------------
+
+    // --- NOUVEAUX FILTRES ---
+    const [verifiedFilterMode, setVerifiedFilterMode] = useState<VerifiedFilterMode>("all");
+    const [followersFilterMode, setFollowersFilterMode] = useState<"all" | "gt" | "lt">("all");
+    const [followersThreshold, setFollowersThreshold] = useState<number>(0);
+    const [minFollowersCount, setMinFollowersCount] = useState<number>(0);
+    const [maxFollowersCount, setMaxFollowersCount] = useState<number>(1000000);
+    const [hasMultiplierFilter, setHasMultiplierFilter] = useState<"all" | "yes" | "no">("all");
+    const [showFollowersStatsModal, setShowFollowersStatsModal] = useState(false);
+    // ------------------------
 
     const itemsPerPage = 30;
     const viewMode = "cards";
@@ -104,15 +118,20 @@ export default function LeagueLeaderboards(): JSX.Element {
             setLoading(true);
             try {
                 const [gRes, tRes] = await Promise.all([
-                    //fetch("/leaderboards/xeet_global/latest.json"),
-                    //fetch("/xeet_topics_raw.json").catch(() => null),
                     fetch("https://infofi.wut-tw.workers.dev/xeet_rankings"),
                     fetch("https://infofi.wut-tw.workers.dev/xeet_topics").catch(() => null),
                 ]);
 
                 if (!gRes.ok) throw new Error("Failed to fetch /xeet_global/latest.json");
                 const gjson = await gRes.json();
-                const profiles: GlobalProfile[] = Array.isArray(gjson.profiles) ? gjson.profiles : [];
+
+                const rawProfiles: GlobalProfile[] = Array.isArray(gjson.profiles) ? gjson.profiles : [];
+                const uniqueProfilesMap = new Map<string, GlobalProfile>();
+                rawProfiles.forEach(p => {
+                    if (p.userId) uniqueProfilesMap.set(p.userId, p);
+                });
+                const profiles = Array.from(uniqueProfilesMap.values());
+
                 setGlobalProfiles(profiles);
                 setGenerationDate(gjson.generationDate || null);
 
@@ -138,7 +157,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                     setTopicMetas(metas);
                 } else {
                     const uniq = new Map<string, TopicMeta>();
-                    gjson.forEach((p: GlobalProfile) =>
+                    profiles.forEach((p: GlobalProfile) =>
                         p.topics.forEach((te: TopicEntry) => {
                             if (!uniq.has(te.topicSlug)) {
                                 uniq.set(te.topicSlug, { topicSlug: te.topicSlug, title: te.topicSlug, logoUrl: undefined });
@@ -164,7 +183,6 @@ export default function LeagueLeaderboards(): JSX.Element {
         let currentEthosMax = -Infinity;
 
         for (const p of globalProfiles) {
-            // ethos_score peut être undefined ou 0
             const score = p.ethos_score !== undefined ? p.ethos_score : 0;
             currentEthosMin = Math.min(currentEthosMin, score);
             currentEthosMax = Math.max(currentEthosMax, score);
@@ -175,11 +193,30 @@ export default function LeagueLeaderboards(): JSX.Element {
 
         if (finalMin !== minEthosScore) setMinEthosScore(finalMin);
         if (finalMax !== maxEthosScore) setMaxEthosScore(finalMax);
-
-        // Init threshold to something reasonable (e.g. median or max) only once if needed
-        // Ici on garde la valeur par défaut ou on pourrait l'initialiser
     }, [globalProfiles]);
-    // ----------------------------------
+
+    // --- Calcul Min/Max Followers Count ---
+    useEffect(() => {
+        if (globalProfiles.length === 0) return;
+
+        let currentMin = Infinity;
+        let currentMax = -Infinity;
+
+        for (const p of globalProfiles) {
+            for (const t of p.topics) {
+                if (t.period === "tournament" && typeof t.followersCount === "number") {
+                    currentMin = Math.min(currentMin, t.followersCount);
+                    currentMax = Math.max(currentMax, t.followersCount);
+                }
+            }
+        }
+
+        const finalMin = currentMin === Infinity ? 0 : Math.floor(currentMin);
+        const finalMax = currentMax === -Infinity ? 1000000 : Math.ceil(currentMax);
+
+        if (finalMin !== minFollowersCount) setMinFollowersCount(finalMin);
+        if (finalMax !== maxFollowersCount) setMaxFollowersCount(finalMax);
+    }, [globalProfiles]);
 
     // close dropdown outside click
     useEffect(() => {
@@ -193,6 +230,9 @@ export default function LeagueLeaderboards(): JSX.Element {
 
     // Helper: build derived profiles mapping
     const derivedProfiles = useMemo(() => {
+        const validTopicSlugs = new Set(topicMetas.map(t => t.topicSlug));
+        const shouldFilterByMeta = validTopicSlugs.size > 0;
+
         const profiles = globalProfiles.map((p) => {
             const ranks: Record<string, {
                 rankSignal?: number;
@@ -202,10 +242,16 @@ export default function LeagueLeaderboards(): JSX.Element {
                 noisePoints?: number;
                 totalPoints?: number;
                 noiseRatio?: number;
+                isVerified?: boolean;
+                followersCount?: number | null;
+                multiplier?: number;
             }> = {};
-
+            let profileVerified = false;
+            let followersCount = 0;
             for (const t of p.topics) {
                 if (t.period !== dataset) continue;
+                if (shouldFilterByMeta && !validTopicSlugs.has(t.topicSlug)) continue;
+
                 ranks[t.topicSlug] = {
                     rankSignal: t.rankSignal,
                     rankNoise: t.rankNoise,
@@ -214,7 +260,12 @@ export default function LeagueLeaderboards(): JSX.Element {
                     noisePoints: t.noisePoints,
                     totalPoints: t.totalPoints,
                     noiseRatio: t.noiseRatio,
+                    isVerified: t.isVerified,
+                    followersCount: t.followersCount,
+                    multiplier: t.multiplier,
                 };
+                profileVerified = t.isVerified || false;
+                followersCount = t.followersCount || 0;
             }
             return {
                 userId: p.userId,
@@ -222,25 +273,27 @@ export default function LeagueLeaderboards(): JSX.Element {
                 name: p.name,
                 avatarUrl: p.avatarUrl,
                 ranks,
-                ethos_score: p.ethos_score || 0, // Passer le score ici
+                ethos_score: p.ethos_score || 0,
+                isVerified: profileVerified,
+                followersCount: followersCount,
             };
         });
 
         return profiles;
-    }, [globalProfiles, dataset]);
+    }, [globalProfiles, dataset, topicMetas]);
 
     // topic meta list used in UI
     const topicsForDataset = useMemo(() => {
         const setSlugs = new Set<string>();
-        for (const p of globalProfiles) {
-            for (const t of p.topics) {
-                if (t.period === dataset) setSlugs.add(t.topicSlug);
+        for (const p of derivedProfiles) {
+            for (const key of Object.keys(p.ranks)) {
+                setSlugs.add(key);
             }
         }
         return topicMetas
             .filter((m) => setSlugs.has(m.topicSlug))
             .sort((a, b) => (a.title || a.topicSlug).localeCompare(b.title || b.topicSlug, undefined, { sensitivity: "base" }));
-    }, [globalProfiles, topicMetas, dataset]);
+    }, [derivedProfiles, topicMetas]);
 
     // visibleTopics inside dropdown
     const visibleTopics = useMemo(() => {
@@ -285,7 +338,6 @@ export default function LeagueLeaderboards(): JSX.Element {
 
     // Main filtering & sorting
     const filteredSortedProfiles = useMemo(() => {
-        // 1️⃣ Base — apply topLimit and Noise Filter
         let arr = derivedProfiles
             .map((p) => {
                 const ranksFiltered: Record<string, any> = {};
@@ -297,14 +349,13 @@ export default function LeagueLeaderboards(): JSX.Element {
                                 ? r.rankSignal
                                 : r.rankNoise;
 
-                    // Determine Ratio
                     const rawNoiseRatio = r.noiseRatio !== undefined
                         ? r.noiseRatio
                         : (r.signalPoints && r.noisePoints ? (r.noisePoints / (r.signalPoints + r.noisePoints)) : 0);
 
                     const ratioPercent = rawNoiseRatio * 100;
 
-                    // Logic for Noise Filter
+                    // Noise Filter
                     let noisePass = true;
                     if (noiseFilterMode === "gt") {
                         if (ratioPercent <= noiseThreshold) noisePass = false;
@@ -312,13 +363,38 @@ export default function LeagueLeaderboards(): JSX.Element {
                         if (ratioPercent >= noiseThreshold) noisePass = false;
                     }
 
-                    if (noisePass && typeof val === "number" && val <= topLimit) {
+                    // Verified Filter (only for tournament)
+                    let verifiedPass = true;
+                    if (dataset === "tournament" && verifiedFilterMode !== "all") {
+                        const isVerified = r.isVerified === true;
+                        p.isVerified = isVerified;
+                        if (verifiedFilterMode === "verified" && !isVerified) verifiedPass = false;
+                        if (verifiedFilterMode === "nonverified" && isVerified) verifiedPass = false;
+                    }
+
+                    // Followers Filter (only for tournament)
+                    let followersPass = true;
+                    if (dataset === "tournament" && followersFilterMode !== "all") {
+                        const followers = r.followersCount || 0;
+                        p.followersCount = followers;
+                        if (followersFilterMode === "gt" && followers < followersThreshold) followersPass = false;
+                        if (followersFilterMode === "lt" && followers > followersThreshold) followersPass = false;
+                    }
+
+                    // Multiplier Filter (only for tournament)
+                    let multiplierPass = true;
+                    if (dataset === "tournament" && hasMultiplierFilter !== "all") {
+                        const hasMultiplier = r.multiplier !== undefined && r.multiplier > 1;
+                        if (hasMultiplierFilter === "yes" && !hasMultiplier) multiplierPass = false;
+                        if (hasMultiplierFilter === "no" && hasMultiplier) multiplierPass = false;
+                    }
+
+                    if (noisePass && verifiedPass && followersPass && multiplierPass && typeof val === "number" && val <= topLimit) {
                         ranksFiltered[slug] = { ...r, ratio: ratioPercent };
                     }
                 }
                 return { ...p, ranksFiltered };
             })
-            // 2️⃣ Filter by Search
             .filter((p) => {
                 const q = profileSearch.trim().toLowerCase();
                 if (!q) return true;
@@ -327,10 +403,8 @@ export default function LeagueLeaderboards(): JSX.Element {
                     (p.handle || "").toLowerCase().includes(q)
                 );
             })
-            // 2b️⃣ Filter by Ethos Score (NOUVEAU)
             .filter((p) => {
                 if (ethosScoreFilterMode === "all") return true;
-
                 const score = p.ethos_score || 0;
                 if (ethosScoreFilterMode === "gt") return score >= ethosScoreThreshold;
                 if (ethosScoreFilterMode === "lt") return score <= ethosScoreThreshold;
@@ -355,14 +429,12 @@ export default function LeagueLeaderboards(): JSX.Element {
             );
         });
 
-        // 3️⃣ Filter by selected topics
         if (selectedTopics.length > 0) {
             arr = arr.filter((p) =>
                 selectedTopics.some((s) => p.ranksFiltered && p.ranksFiltered[s])
             );
         }
 
-        // 4️⃣ Filter by topic overlap count
         if (topicCountFilter !== null) {
             if (selectedTopics.length > 0) {
                 arr = arr.filter((p) => {
@@ -379,10 +451,8 @@ export default function LeagueLeaderboards(): JSX.Element {
             }
         }
 
-        // 5️⃣ Remove profiles with no valid ranks after filtering
         arr = arr.filter((p) => Object.keys(p.ranksFiltered || {}).length > 0);
 
-        // 7️⃣ Auto Sort... (inchangé)
         if (selectedTopics.length === 1) {
             const slug = selectedTopics[0];
             arr.sort((a, b) => {
@@ -453,7 +523,6 @@ export default function LeagueLeaderboards(): JSX.Element {
                     if (b.__score !== a.__score) return b.__score - a.__score;
                     return (a.name || a.handle || "").localeCompare(b.name || b.handle || "", undefined, { sensitivity: "base" });
                 });
-
         }
 
         return arr;
@@ -466,27 +535,24 @@ export default function LeagueLeaderboards(): JSX.Element {
         metric,
         noiseFilterMode,
         noiseThreshold,
-        ethosScoreFilterMode, // Ajout
-        ethosScoreThreshold   // Ajout
+        ethosScoreFilterMode,
+        ethosScoreThreshold,
+        verifiedFilterMode,
+        followersFilterMode,
+        followersThreshold,
+        hasMultiplierFilter,
+        dataset
     ]);
-
-    // ** DYNAMIC CALCULATIONS **
 
     // --- Calcul des Stats Ethos par Topic ---
     const ethosScoreStatsByTopic = useMemo(() => {
         const topicEthosScores = new Map<string, number[]>();
         const getTopicMeta = (slug: string) => topicMetas.find((t) => t.topicSlug === slug) ?? { topicSlug: slug, title: slug };
 
-        // 1. Collecter les scores pour chaque topic présent dans les profils filtrés
         for (const p of filteredSortedProfiles) {
             const ethosScore = p.ethos_score || 0;
-
-            // 🛑 MODIFICATION : On ignore si le score est 0
             if (ethosScore === 0) continue;
-
-            // On regarde quels topics sont actifs pour ce profil (après filtre)
             const activeSlugs = Object.keys(p.ranksFiltered || {});
-
             for (const topicSlug of activeSlugs) {
                 if (!topicEthosScores.has(topicSlug)) {
                     topicEthosScores.set(topicSlug, []);
@@ -495,7 +561,6 @@ export default function LeagueLeaderboards(): JSX.Element {
             }
         }
 
-        // 2. Calculer Stats
         const stats: {
             topicSlug: string;
             title: string;
@@ -509,12 +574,11 @@ export default function LeagueLeaderboards(): JSX.Element {
 
         for (const [topicSlug, scores] of topicEthosScores.entries()) {
             if (scores.length === 0) continue;
-
             const sum = scores.reduce((a, b) => a + b, 0);
             const avg = sum / scores.length;
             const median = calculateMedian(scores);
             const max = Math.max(...scores);
-            const min = Math.min(...scores); // Le minimum sera maintenant > 0
+            const min = Math.min(...scores);
             const meta = getTopicMeta(topicSlug);
 
             stats.push({
@@ -529,11 +593,64 @@ export default function LeagueLeaderboards(): JSX.Element {
             });
         }
 
-        // Tri par moyenne décroissante
         return stats.sort((a, b) => b.avg - a.avg);
-
     }, [filteredSortedProfiles, topicMetas]);
-    // ----------------------------------------
+
+    // --- Calcul des Stats Followers par Topic (tournaments uniquement) ---
+    const followersStatsByTopic = useMemo(() => {
+        if (dataset !== "tournament") return [];
+
+        const topicFollowers = new Map<string, number[]>();
+        const getTopicMeta = (slug: string) => topicMetas.find((t) => t.topicSlug === slug) ?? { topicSlug: slug, title: slug };
+
+        for (const p of filteredSortedProfiles) {
+            const activeSlugs = Object.keys(p.ranksFiltered || {});
+            for (const topicSlug of activeSlugs) {
+                const r = p.ranksFiltered[topicSlug];
+                const followers = r?.followersCount;
+                if (typeof followers === "number") {
+                    if (!topicFollowers.has(topicSlug)) {
+                        topicFollowers.set(topicSlug, []);
+                    }
+                    topicFollowers.get(topicSlug)!.push(followers);
+                }
+            }
+        }
+
+        const stats: {
+            topicSlug: string;
+            title: string;
+            logoUrl?: string | null;
+            avg: number;
+            median: number;
+            max: number;
+            min: number;
+            count: number;
+        }[] = [];
+
+        for (const [topicSlug, followers] of topicFollowers.entries()) {
+            if (followers.length === 0) continue;
+            const sum = followers.reduce((a, b) => a + b, 0);
+            const avg = sum / followers.length;
+            const median = calculateMedian(followers);
+            const max = Math.max(...followers);
+            const min = Math.min(...followers);
+            const meta = getTopicMeta(topicSlug);
+
+            stats.push({
+                topicSlug,
+                title: meta.title || topicSlug,
+                logoUrl: meta.logoUrl,
+                avg,
+                median,
+                max,
+                min,
+                count: followers.length,
+            });
+        }
+
+        return stats.sort((a, b) => b.avg - a.avg);
+    }, [filteredSortedProfiles, topicMetas, dataset]);
 
     const dynamicCounts = useMemo(() => {
         const activeTopics = new Set<string>();
@@ -573,8 +690,7 @@ export default function LeagueLeaderboards(): JSX.Element {
     useEffect(() => { if (currentPage > totalPages) setCurrentPage(1); }, [totalPages]);
     const start = (currentPage - 1) * itemsPerPage;
     const pageProfiles = filteredSortedProfiles.slice(start, start + itemsPerPage);
-
-
+    
     // helpers
     const toggleTopic = (slug: string) => {
         setSelectedTopics((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
@@ -585,7 +701,6 @@ export default function LeagueLeaderboards(): JSX.Element {
 
     const getTopicMeta = (slug: string) => topicMetas.find((t) => t.topicSlug === slug) ?? { topicSlug: slug, title: slug };
 
-    // Texte récapitulatif pour le modal
     const rankedText = useMemo(() => {
         return `${dataset} / Top ${topLimit} / ${selectedTopics.length > 0 ? selectedTopics.length + ' topics' : 'All topics'}`;
     }, [dataset, topLimit, selectedTopics]);
@@ -713,18 +828,14 @@ export default function LeagueLeaderboards(): JSX.Element {
                         )}
                     </div>
 
-                    {/* --- NOUVEAU BLOC : ETHOS SCORE FILTER --- */}
+                    {/* Ethos Score Filter */}
                     <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
                         <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Ethos Score</span>
-
-                        {/* Toggle Buttons */}
                         <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
                             <button onClick={() => { setEthosScoreFilterMode("all"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${ethosScoreFilterMode === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>All</button>
                             <button onClick={() => { setEthosScoreFilterMode("gt"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${ethosScoreFilterMode === "gt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>&gt;</button>
                             <button onClick={() => { setEthosScoreFilterMode("lt"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${ethosScoreFilterMode === "lt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>&lt;</button>
                         </div>
-
-                        {/* Slider (Only if not All) */}
                         {ethosScoreFilterMode !== "all" && (
                             <div className="flex items-center gap-2 ml-1">
                                 <input
@@ -750,9 +861,68 @@ export default function LeagueLeaderboards(): JSX.Element {
                             </div>
                         )}
                     </div>
-                    {/* --- FIN BLOC ETHOS SCORE --- */}
 
-                    {/* --- BOUTON STATS ETHOS --- */}
+                    {/* Verified Filter (Tournament only) */}
+                    {dataset === "tournament" && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                            <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Verified</span>
+                            <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
+                                <button onClick={() => { setVerifiedFilterMode("all"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${verifiedFilterMode === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>All</button>
+                                <button onClick={() => { setVerifiedFilterMode("verified"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${verifiedFilterMode === "verified" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>✓</button>
+                                <button onClick={() => { setVerifiedFilterMode("nonverified"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${verifiedFilterMode === "nonverified" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>✗</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Followers Filter (Tournament only) */}
+                    {dataset === "tournament" && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                            <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Followers</span>
+                            <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
+                                <button onClick={() => { setFollowersFilterMode("all"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${followersFilterMode === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>All</button>
+                                <button onClick={() => { setFollowersFilterMode("gt"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${followersFilterMode === "gt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>&gt;</button>
+                                <button onClick={() => { setFollowersFilterMode("lt"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${followersFilterMode === "lt" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>&lt;</button>
+                            </div>
+                            {followersFilterMode !== "all" && (
+                                <div className="flex items-center gap-2 ml-1">
+                                    <input
+                                        type="range"
+                                        min={minFollowersCount}
+                                        max={maxFollowersCount}
+                                        step="1000"
+                                        value={followersThreshold}
+                                        onChange={(e) => { setFollowersThreshold(Number(e.target.value)); setCurrentPage(1); }}
+                                        className="w-24 h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-blue-600"
+                                    />
+                                    <input
+                                        type="text"
+                                        value={followersThreshold}
+                                        onChange={(e) => {
+                                            const val = e.target.value.replace(/[^0-9]/g, "");
+                                            const value = Number(val);
+                                            setFollowersThreshold(value);
+                                            setCurrentPage(1);
+                                        }}
+                                        className="w-16 text-right font-mono text-xs text-blue-600 dark:text-blue-400 bg-transparent border border-gray-300 dark:border-gray-600 rounded px-1 focus:outline-none focus:ring-1 focus:ring-blue-400"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    )}
+
+                    {/* Multiplier Filter (Tournament only) */}
+                    {dataset === "tournament" && (
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm">
+                            <span className="font-medium text-gray-600 dark:text-gray-400 whitespace-nowrap">Multiplier</span>
+                            <div className="flex bg-gray-100 dark:bg-gray-700 rounded-md p-1 gap-1">
+                                <button onClick={() => { setHasMultiplierFilter("all"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${hasMultiplierFilter === "all" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>All</button>
+                                <button onClick={() => { setHasMultiplierFilter("yes"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${hasMultiplierFilter === "yes" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>Yes</button>
+                                <button onClick={() => { setHasMultiplierFilter("no"); setCurrentPage(1); }} className={`px-2 py-0.5 rounded text-xs font-medium transition-colors ${hasMultiplierFilter === "no" ? "bg-white dark:bg-gray-600 shadow text-blue-600 dark:text-blue-400" : "text-gray-500 hover:text-gray-700"}`}>No</button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Stats Buttons */}
                     <button
                         onClick={() => setShowEthosStatsModal(true)}
                         disabled={ethosScoreStatsByTopic.length === 0}
@@ -761,7 +931,17 @@ export default function LeagueLeaderboards(): JSX.Element {
                     >
                         <BarChart3 className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                     </button>
-                    {/* --------------------------- */}
+
+                    
+                        <button
+                            onClick={() => setShowFollowersStatsModal(true)}
+                            disabled={followersStatsByTopic.length === 0}
+                            title="View Followers Statistics by Topic"
+                            className="px-3 py-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm flex items-center justify-center transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            <Users className="w-5 h-5 text-green-600 dark:text-green-400" />
+                        </button>
+                    
 
                     <div className="flex-grow"></div>
 
@@ -771,7 +951,6 @@ export default function LeagueLeaderboards(): JSX.Element {
                     </div>
 
                 </div>
-                {/* Last generation date */}
                 <div className="text-xs text-gray-500 dark:text-gray-400 w-full text-right">
                     Last updated: {generationDate ? new Date(generationDate).toLocaleString() : 'N/A'}
                 </div>
@@ -786,7 +965,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                 ))}
             </div>
 
-            {/* Main content: cards or table */}
+            {/* Main content */}
             {loading ? (
                 <div className="py-20 text-center text-gray-500">Loading...</div>
             ) : filteredSortedProfiles.length === 0 ? (
@@ -808,10 +987,7 @@ export default function LeagueLeaderboards(): JSX.Element {
                     ))}
                 </div>
             ) : (
-                // TABLE VIEW (inchangé)
                 <div className="overflow-auto border rounded-lg shadow-sm">
-                    {/* ... (Table content removed for brevity, but logic remains same) ... */}
-                    {/* Si vous avez besoin du tableau complet, je peux le remettre, mais les modifications ne le touchent pas structurellement */}
                     <div className="p-4">Table view logic here</div>
                 </div>
             )}
@@ -904,6 +1080,93 @@ export default function LeagueLeaderboards(): JSX.Element {
                         <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
                             <button
                                 onClick={() => setShowEthosStatsModal(false)}
+                                className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
+                            >
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {/* --- ETHOS SCORE STATS MODAL --- */}
+            {showFollowersStatsModal && (
+                <div
+                    className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900 bg-opacity-75 p-4"
+                    onClick={() => setShowFollowersStatsModal(false)}
+                >
+                    <div
+                        className="bg-white dark:bg-gray-900 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        {/* Header */}
+                        <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                            <h3 className="text-xl font-bold">Statistics by Followers Count</h3>
+                            <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                                X Followers statistics for <strong>{rankedText}</strong>
+                            </p>
+                        </div>
+
+                        {/* Table Content */}
+                        <div className="flex-grow overflow-auto">
+                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                                <thead className="sticky top-0 bg-gray-50 dark:bg-gray-800">
+                                    <tr>
+                                        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Topic
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Average Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Median Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Max Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Min Score
+                                        </th>
+                                        <th className="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            Profiles
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                                    {followersStatsByTopic.map((s) => (
+                                        <tr key={s.topicSlug} className="hover:bg-gray-50 dark:hover:bg-gray-800">
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm font-medium flex items-center gap-2">
+                                                <img
+                                                    src={s.logoUrl || "/default-avatar.jpg"}
+                                                    alt={s.title}
+                                                    className="w-6 h-6 rounded-full"
+                                                />
+                                                {s.title}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.avg.toFixed(0)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.median.toFixed(0)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.max.toFixed(0)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right font-mono">
+                                                {s.min.toFixed(0)}
+                                            </td>
+                                            <td className="px-4 py-2 whitespace-nowrap text-sm text-right text-gray-500">
+                                                {s.count}
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        {/* Footer */}
+                        <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex justify-end">
+                            <button
+                                onClick={() => setShowFollowersStatsModal(false)}
                                 className="px-4 py-2 text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 transition-colors"
                             >
                                 Close
