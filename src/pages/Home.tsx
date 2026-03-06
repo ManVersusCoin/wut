@@ -12,13 +12,31 @@ interface FeatureCardProps {
 
 const features: FeatureCardProps[] = [
     {
+        title: "Xeet Cards",
+        description:
+            "Track creator cards, pack reveals, market activity and leaderboards on the Xeet protocol.",
+        image: "/images/og-banner.png",
+        link: "https://xeet.mvc-web.xyz",
+        active: true,
+        isNew: true,
+    },
+    {
+        title: "TokenWorks Dasboard",
+        description:
+            "A dashboard to analyze strategy tokens by TokensWorks - Statistics and opportunities",
+        image: "/images/tokenworks.png",
+        link: "https://tw-wut.vercel.app",
+        active: true,
+        isNew: true,
+    },
+    {
         title: "Xeet Analysis",
         description:
             "Explore top profiles ranked by influence and insights. Compare across topics and timeframes.",
         image: "/images/xeet-leaderboards.png",
         link: "/xeet-leagues",
         active: true,
-        isNew: true,
+        isNew: false,
     },
     {
         title: "Wallchain Analysis",
@@ -27,7 +45,7 @@ const features: FeatureCardProps[] = [
         image: "/images/wallchain.jpg",
         link: "/wallchain",
         active: true,
-        isNew: true,
+        isNew: false,
     },
     {
         title: "Xeet Pack Generator",
